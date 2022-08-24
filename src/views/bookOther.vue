@@ -13,7 +13,7 @@
 
 <script>
 import editInput from "@/components/editInput";
-import bookinfo from "@/assets/bookinfo.js";
+import bookinfo from "@/assets/editConfig.js";
 import { reactive, toRefs } from "vue";
 
 export default {

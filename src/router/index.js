@@ -59,7 +59,19 @@ const routes = [
         name: "other",
         component: bookOther,
       },
+      {
+        path: "/bookSource/:asdasdasd/:asdasdas",
+        redirect: { name: "home" },
+      },
     ],
+  },
+  {
+    path: "/:asdasdasd",
+    redirect: { name: "home" },
+  },
+  {
+    path: "/bookSource/:asdasdasda",
+    redirect: { name: "home" },
   },
 ];
 
