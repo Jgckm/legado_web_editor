@@ -36,20 +36,18 @@
     >
       <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
         目录
-      </li> </router-link
-    ><router-link
+      </li>
+    </router-link>
+    <router-link
       custom
       v-slot="{ navigate, isActive }"
       :to="{ name: 'content' }"
     >
       <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
         正文
-      </li> </router-link
-    ><router-link
-      custom
-      v-slot="{ navigate, isActive }"
-      :to="{ name: 'other' }"
-    >
+      </li>
+    </router-link>
+    <router-link custom v-slot="{ navigate, isActive }" :to="{ name: 'other' }">
       <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
         其他
       </li>
@@ -94,6 +92,7 @@ ul {
   width: 40em;
   height: 40px;
   display: flex;
+
   li {
     display: block;
     text-align: center;
@@ -101,11 +100,13 @@ ul {
     width: 16%;
     list-style: none;
     cursor: pointer;
+
     &:hover {
       color: red;
     }
   }
 }
+
 .active {
   color: #fff !important;
   background-color: #80808075;
@@ -116,6 +117,7 @@ ul {
 ul li {
   border-bottom: #333333 2px solid;
 }
+
 a {
   font-size: 18px;
   color: blue;
