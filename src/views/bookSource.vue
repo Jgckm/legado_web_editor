@@ -75,12 +75,10 @@
 </template>
 <script>
 import { onMounted, reactive, toRefs } from "vue";
-// import { useRoute } from "vue-router";
 
 export default {
   setup() {
     const data = reactive({});
-    // const route = useRoute();
 
     onMounted(() => {});
 

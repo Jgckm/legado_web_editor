@@ -1,27 +1,33 @@
 <template>
   <div class="out">
+    <input
+      type="text"
+      placeholder="输入后端地址 如：192.168.0.1:1122"
+      v-model="url"
+      @input="changInput(url)"
+    />
     <ul>
       <li
         :class="current_tab === 'editTab' ? 'active' : ''"
-        @click="current_tab = 'editTab'"
+        @click="handleSetActive('editTab')"
       >
         编辑源
       </li>
       <li
         :class="current_tab === 'editDebug' ? 'active' : ''"
-        @click="current_tab = 'editDebug'"
+        @click="handleSetActive('editDebug')"
       >
         调试源
       </li>
       <li
         :class="current_tab === 'editList' ? 'active' : ''"
-        @click="current_tab = 'editList'"
+        @click="handleSetActive('editList')"
       >
         源列表
       </li>
       <li
         :class="current_tab === 'editHelp' ? 'active' : ''"
-        @click="current_tab = 'editHelp'"
+        @click="handleSetActive('editHelp')"
       >
         帮助信息
       </li>
@@ -41,6 +47,8 @@ import editList from "@/components/editList";
 import editHelp from "@/components/editHelp";
 
 import { reactive, toRefs } from "vue";
+import store from "@/store";
+
 export default {
   name: "editOut",
   components: {
@@ -51,11 +59,23 @@ export default {
   },
   setup() {
     const data = reactive({
-      current_tab: "editTab",
+      url: localStorage.getItem("url") || "",
+      current_tab: localStorage.getItem("tabName") || "editTab",
     });
+
+    const handleSetActive = (tabName) => {
+      data.current_tab = tabName;
+      localStorage.setItem("tabName", tabName);
+    };
+
+    const changInput = (url) => {
+      store.commit("changeUrl", url);
+    };
 
     return {
       ...toRefs(data),
+      handleSetActive,
+      changInput,
     };
   },
 };

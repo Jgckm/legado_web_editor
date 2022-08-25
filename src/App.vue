@@ -46,7 +46,7 @@ textarea {
   border-radius: 4px;
   border: #ccc 1px solid;
   font-size: 16px;
-  font-family: 微软雅黑, Arial, serif;
+  font-family: "Microsoft YaHei UI", Arial, serif;
   line-height: 20px;
   padding: 10px 10px 10px;
 }

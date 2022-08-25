@@ -1,30 +1,32 @@
 <template>
-  <input
-    type="text"
-    placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
-  />
-  <div>
-    <div class="tool">
-      <button>导入书源文件</button>
-      <button>导出书源文件</button>
-      <button>删除选中源</button>
-      <button>清空列表</button>
-    </div>
-    <div class="book_list">
-      <div
-        v-for="(data, index) in 10"
-        :key="index"
-        class="book_item"
-        v-bind:class="index === currentActive ? 'book_active' : ''"
-        @click="handleItemClick(index)"
-      >
-        <div class="book_index">{{ data }}</div>
-        <div style="margin-left: 10px">
-          <div class="book_info">
-            <span>test_book_name</span>
-            <span>last_edit:2202:22:00:22</span>
+  <div style="display: flex; flex-flow: column; flex: 1">
+    <input
+      type="text"
+      placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
+    />
+    <div style="flex: 1">
+      <div class="tool">
+        <button>导入书源文件</button>
+        <button>导出书源文件</button>
+        <button>删除选中源</button>
+        <button>清空列表</button>
+      </div>
+      <div class="book_list">
+        <div
+          v-for="(data, index) in bookSource"
+          :key="index"
+          class="book_item"
+          v-bind:class="index === currentActive ? 'book_active' : ''"
+          @click="handleItemClick(index)"
+        >
+          <div class="book_index">{{ index }}</div>
+          <div style="margin-left: 10px">
+            <div class="book_info">
+              <span>{{ data.bookSourceName }}</span>
+              <span>{{ data.lastUpdateTime }}</span>
+            </div>
+            <div>{{ data.bookSourceUrl }}</div>
           </div>
-          <div>http://test.book.com</div>
         </div>
       </div>
     </div>
@@ -33,15 +35,20 @@
 
 <script>
 import { ref } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "editList",
+
   setup() {
+    const store = useStore();
+    const bookSource = store.state.bookSource;
+    console.log(bookSource);
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
     };
-    return { currentActive, handleItemClick };
+    return { currentActive, handleItemClick, bookSource };
   },
 };
 </script>
@@ -66,6 +73,7 @@ input {
   align-items: center;
   margin-top: 10px;
   padding: 0 10px;
+  cursor: pointer;
   background-color: #eeeeee;
 }
 .book_active {

@@ -10,6 +10,9 @@
 <script>
 export default {
   name: "editDebug",
+  setup() {
+    return {};
+  },
 };
 </script>
 
