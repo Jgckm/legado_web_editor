@@ -7,6 +7,7 @@
       :hint="item.hint"
       :title="item.title"
       :rows="item.rows"
+      v-model:content="bookContent[item.id]"
     ></edit-input>
   </div>
 </template>
@@ -14,7 +15,8 @@
 <script>
 import editInput from "@/components/editInput";
 import bookinfo from "@/assets/editConfig.js";
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, watchEffect } from "vue";
+import store from "@/store";
 
 export default {
   components: {
@@ -23,9 +25,20 @@ export default {
   setup() {
     const data = reactive({
       data: bookinfo.base,
+      bookContent: store.state.bookItemContent,
+    });
+
+    const changeContent = (newContent) => {
+      console.log(newContent);
+      store.commit("changeNewContent", newContent);
+    };
+
+    watchEffect(() => {
+      data.bookContent = store.state.bookItemContent;
     });
     return {
       ...toRefs(data),
+      changeContent,
     };
   },
 };

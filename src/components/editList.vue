@@ -23,7 +23,7 @@
           <div style="margin-left: 10px">
             <div class="book_info">
               <span>{{ data.bookSourceName }}</span>
-              <span>{{ data.lastUpdateTime }}</span>
+              <span>最后修改：{{ formateTime(data.lastUpdateTime) }}</span>
             </div>
             <div>{{ data.bookSourceUrl }}</div>
           </div>
@@ -48,13 +48,47 @@ export default {
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
+      store.commit("changeBookItemContent", data.bookSources[index]);
     };
 
+    const formateTime = (date) => {
+      const time = new Date(date);
+      const year = time.getFullYear();
+
+      let month = time.getMonth();
+      month = month < 10 ? "0" + month : month;
+
+      let day = time.getDay();
+      day = day < 10 ? "0" + day : day;
+
+      let hour = time.getHours();
+      hour = hour < 10 ? "0" + hour : hour;
+
+      let minute = time.getMinutes();
+      minute = minute < 10 ? "0" + minute : minute;
+
+      let seconds = time.getSeconds();
+      seconds = minute = seconds < 10 ? "0" + seconds : seconds;
+
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day +
+        " " +
+        hour +
+        ":" +
+        minute +
+        ":" +
+        seconds
+      );
+    };
     watchEffect(() => {
       data.bookSources = store.state.bookSource;
     });
 
-    return { currentActive, handleItemClick, ...toRefs(data) };
+    return { currentActive, handleItemClick, ...toRefs(data), formateTime };
   },
 };
 </script>
@@ -104,6 +138,7 @@ input {
   display: flex;
   justify-content: space-between;
 }
+
 .book_list {
   height: calc(100vh - 125px);
   overflow-y: auto;

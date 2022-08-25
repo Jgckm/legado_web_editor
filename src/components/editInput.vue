@@ -1,13 +1,16 @@
 <template>
   <div class="edit_input">
     <span>{{ title }}<i>:</i></span>
-    <textarea :id="type" :placeholder="hint" :rows="rows"></textarea>
+    <textarea
+      :id="type"
+      :placeholder="hint"
+      :rows="rows"
+      :value="content"
+    ></textarea>
   </div>
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
-
 export default {
   props: {
     title: {
@@ -26,15 +29,12 @@ export default {
       type: String,
       default: "",
     },
+    content: {
+      type: [String, Number],
+      default: "",
+    },
   },
-  setup() {
-    const data = reactive({
-      title: "",
-    });
-    return {
-      ...toRefs(data),
-    };
-  },
+  setup() {},
 };
 </script>
 
@@ -44,10 +44,12 @@ span {
   justify-content: space-around;
   width: 70px;
   white-space: nowrap;
+
   i {
     font-style: normal;
   }
 }
+
 .edit_input {
   display: flex;
   justify-content: space-between;

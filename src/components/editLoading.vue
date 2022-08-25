@@ -1,7 +1,9 @@
 <template>
-  <div class="half-circle-spinner">
-    <div class="circle circle-1"></div>
-    <div class="circle circle-2"></div>
+  <div class="fixed">
+    <div class="half-circle-spinner">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+    </div>
   </div>
 </template>
 
@@ -12,6 +14,12 @@ export default {
 </script>
 
 <style scoped>
+.fixed {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .half-circle-spinner,
 .half-circle-spinner * {
   box-sizing: border-box;

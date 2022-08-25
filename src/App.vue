@@ -30,6 +30,7 @@ export default {
 }
 .main {
   width: 100%;
+  height: calc(100vh - 64px);
   overflow-y: auto;
 }
 textarea {
