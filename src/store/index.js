@@ -3,9 +3,8 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     url: localStorage.getItem("url") || "",
-    bookSource: [],
-    bookItemContent: {},
-    newContent: {}, // 更改源的对象值
+    bookSource: [], // 临时存放所有书源
+    bookItemContent: {}, // 当前点击的书源项
   },
   getters: {},
   mutations: {
@@ -18,9 +17,6 @@ export default createStore({
     changeBookItemContent(state, content) {
       state.bookItemContent = content;
       console.log(content);
-    },
-    changeNewContent(state, newContent) {
-      state.newContent = newContent;
     },
   },
   actions: {},

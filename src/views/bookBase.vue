@@ -7,7 +7,7 @@
       :hint="item.hint"
       :title="item.title"
       :rows="item.rows"
-      v-model:content="bookContent[item.id]"
+      content="bookContent[item.id]"
     ></edit-input>
   </div>
 </template>
@@ -28,17 +28,11 @@ export default {
       bookContent: store.state.bookItemContent,
     });
 
-    const changeContent = (newContent) => {
-      console.log(newContent);
-      store.commit("changeNewContent", newContent);
-    };
-
     watchEffect(() => {
       data.bookContent = store.state.bookItemContent;
     });
     return {
       ...toRefs(data),
-      changeContent,
     };
   },
 };

@@ -6,6 +6,7 @@
       :placeholder="hint"
       :rows="rows"
       :value="content"
+      @input="change"
     ></textarea>
   </div>
 </template>
@@ -34,7 +35,15 @@ export default {
       default: "",
     },
   },
-  setup() {},
+  emits: ["content"],
+  setup(prosp, { emit }) {
+    const change = () => {
+      emit("");
+    };
+    return {
+      change,
+    };
+  },
 };
 </script>
 
