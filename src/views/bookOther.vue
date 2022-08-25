@@ -9,6 +9,7 @@
       :rows="item.rows"
     ></edit-input>
   </div>
+  <router-view></router-view>
 </template>
 
 <script>

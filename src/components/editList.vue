@@ -13,13 +13,13 @@
       </div>
       <div class="book_list">
         <div
-          v-for="(data, index) in bookSource"
+          v-for="(data, index) in bookSources"
           :key="index"
           class="book_item"
           v-bind:class="index === currentActive ? 'book_active' : ''"
           @click="handleItemClick(index)"
         >
-          <div class="book_index">{{ index }}</div>
+          <div class="book_index">{{ index + 1 }}</div>
           <div style="margin-left: 10px">
             <div class="book_info">
               <span>{{ data.bookSourceName }}</span>
@@ -34,21 +34,27 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { useStore } from "vuex";
+import { reactive, ref, toRefs, watchEffect } from "vue";
+import store from "@/store";
 
 export default {
   name: "editList",
 
   setup() {
-    const store = useStore();
-    const bookSource = store.state.bookSource;
-    console.log(bookSource);
+    let data = reactive({
+      bookSources: store.state.bookSource,
+    });
+
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
     };
-    return { currentActive, handleItemClick, bookSource };
+
+    watchEffect(() => {
+      data.bookSources = store.state.bookSource;
+    });
+
+    return { currentActive, handleItemClick, ...toRefs(data) };
   },
 };
 </script>
@@ -60,25 +66,30 @@ input {
   height: 25px;
   outline: none;
 }
+
 .tool {
   display: flex;
   justify-content: space-around;
+
   button {
     flex: 1;
     margin: 0 2px;
   }
 }
+
 .book_item {
   display: flex;
   align-items: center;
   margin-top: 10px;
-  padding: 0 10px;
+  padding: 10px;
   cursor: pointer;
   background-color: #eeeeee;
 }
+
 .book_active {
   background-color: limegreen;
 }
+
 .book_index {
   width: 30px;
   height: 30px;
@@ -87,9 +98,14 @@ input {
   border-radius: 50%;
   background-color: lightpink;
 }
+
 .book_info {
   width: 500px;
   display: flex;
   justify-content: space-between;
+}
+.book_list {
+  height: calc(100vh - 125px);
+  overflow-y: auto;
 }
 </style>

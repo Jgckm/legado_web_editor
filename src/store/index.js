@@ -3,7 +3,7 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     url: localStorage.getItem("url") || "",
-    bookSource: null,
+    bookSource: [],
   },
   getters: {},
   mutations: {

@@ -1,19 +1,11 @@
 <template>
   <div class="editor">
     <router-view></router-view>
-    <edit-menu></edit-menu>
-    <edit-out></edit-out>
   </div>
 </template>
 
 <script>
-import editMenu from "@/components/editMenu";
-import editOut from "@/components/editOut";
 export default {
-  components: {
-    editMenu,
-    editOut,
-  },
   setup() {
     const handleClick = () => {
       console.log(111);

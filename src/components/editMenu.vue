@@ -9,14 +9,17 @@
     <button @click="handleClick">↷重做操作</button>
     <button @click="handleClick">⇏调试源</button>
     <button @click="handleClick">✓保存源</button>
+    <edit-loading class="fixed"></edit-loading>
   </div>
 </template>
 
 <script>
 import { http } from "@/utils/http";
 import store from "@/store";
+import editLoading from "@/components/editLoading";
 
 export default {
+  components: { editLoading },
   setup() {
     const handleClick = () => {
       console.log(1111);
@@ -25,13 +28,12 @@ export default {
       console.log(store.state.url);
       http(store.state.url, "getBookSources")
         .then((res) => {
-          console.log(res.data);
           store.commit("changeSource", res.data);
+          localStorage.setItem("url", store.state.url);
         })
         .catch((err) => {
           console.log(err);
         });
-      localStorage.setItem("url", store.state.url);
     };
 
     return {
