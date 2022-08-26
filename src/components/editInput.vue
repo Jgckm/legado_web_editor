@@ -6,12 +6,15 @@
       :placeholder="hint"
       :rows="rows"
       :value="content"
+      ref="attr"
       @input="change"
     ></textarea>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   props: {
     title: {
@@ -37,11 +40,16 @@ export default {
   },
   emits: ["changeContent"],
   setup(props, { emit }) {
+    const attr = ref("");
     const change = () => {
-      emit("changeContent", props.content);
+      emit("changeContent", {
+        value: attr.value.value,
+        type: attr.value.getAttribute("id"),
+      });
     };
     return {
       change,
+      attr,
     };
   },
 };
