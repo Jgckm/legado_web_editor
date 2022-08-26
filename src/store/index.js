@@ -7,6 +7,7 @@ export default createStore({
     bookItemContent: source_json, // 当前点击的书源项
     currentTab: localStorage.getItem("tabName") || "editTab",
     editTabSourceInfo: {},
+    editHistory: { new: [], old: [] },
   },
   getters: {},
   mutations: {
@@ -34,6 +35,20 @@ export default createStore({
         state.editTabSourceInfo = state.bookItemContent;
       }
       console.log(tabName);
+    },
+    editHistory(state, history) {
+      if (state.editHistory.new.length === 50) {
+        state.editHistory.new.shift();
+      }
+      state.editHistory.new.push(history);
+    },
+    editHistoryUndo(state) {
+      if (state.editHistory.old.length === 50) {
+        state.editHistory.old.shift();
+      }
+      state.editHistory.old.push(state.bookItemContent);
+      // state.bookItemContent = state.editHistory.new.pop();
+      console.log("撤销", state.editHistory.new.pop());
     },
     clearEdit(state) {
       state.bookItemContent = {};

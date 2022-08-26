@@ -1,10 +1,10 @@
 <template>
-  <div style="display: flex; flex-flow: column; flex: 1">
+  <div style="display: flex; flex-flow: column">
     <input
       type="text"
       placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
     />
-    <div style="flex: 1">
+    <div>
       <div class="tool">
         <button>导入书源文件</button>
         <button>导出书源文件</button>
@@ -20,10 +20,11 @@
           @click="handleItemClick(index)"
         >
           <div class="book_index">{{ index + 1 }}</div>
-          <div style="margin-left: 10px">
+          <div style="margin-left: 10px; flex: 1">
             <div class="book_info">
               <span>{{ data.bookSourceName }}</span>
               <span>最后修改：{{ formatTime(data.lastUpdateTime) }}</span>
+              <span>分组：{{ data.bookSourceGroup }}</span>
             </div>
             <div>{{ data.bookSourceUrl }}</div>
           </div>

@@ -14,7 +14,7 @@
     <button @click="pull">⇊拉取源</button>
     <button @click="conver">⋙生成源</button>
     <button @click="clearEdit">✗清空表单</button>
-    <button @click="handleClick">↶撤销操作</button>
+    <button @click="undo">↶撤销操作</button>
     <button @click="handleClick">↷重做操作</button>
     <button @click="handleClick">⇏调试源</button>
     <button @click="handleClick">✓保存源</button>
@@ -115,6 +115,10 @@ export default {
     const conver = () => {
       store.commit("changeTabName", "editTab");
     };
+
+    const undo = () => {
+      store.commit("editHistoryUndo");
+    };
     const clearEdit = () => {
       store.commit("clearEdit");
       console.log("已清除");
@@ -134,6 +138,7 @@ export default {
       changeSuccessShow,
       successShow,
       conver,
+      undo,
     };
   },
 };
