@@ -18,6 +18,9 @@ export default createStore({
       state.bookItemContent = content;
       console.log(content);
     },
+    clearEdit(state) {
+      state.bookItemContent = {};
+    },
   },
   actions: {},
   modules: {},

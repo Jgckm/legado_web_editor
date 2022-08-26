@@ -4,8 +4,8 @@
     <button @click="handleClick">⇈推送源</button>
     <button @click="pull">⇊拉取源</button>
     <button @click="handleClick">⋘编辑源</button>
-    <button @click="conver">⋙生成源</button>
-    <button @click="handleClick">✗清空表单</button>
+    <button @click="handleClick">⋙生成源</button>
+    <button @click="clearEdit">✗清空表单</button>
     <button @click="handleClick">↶撤销操作</button>
     <button @click="handleClick">↷重做操作</button>
     <button @click="handleClick">⇏调试源</button>
@@ -49,12 +49,15 @@ export default {
           localStorage.setItem("url", "");
         });
     };
-    const conver = () => {};
+    const clearEdit = () => {
+      store.commit("clearEdit");
+      console.log("已清除");
+    };
 
     return {
       handleClick,
       pull,
-      conver,
+      clearEdit,
       isShow,
       changeShow,
       warnShow,
