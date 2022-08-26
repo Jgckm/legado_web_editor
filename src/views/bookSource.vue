@@ -129,6 +129,7 @@ ul {
     }
   }
 }
+
 .active {
   color: #fff !important;
   background-color: #80808075;

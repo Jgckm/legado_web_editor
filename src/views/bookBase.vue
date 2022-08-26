@@ -15,7 +15,7 @@
 
 <script>
 import editInput from "@/components/editInput";
-import bookinfo from "@/assets/editConfig.js";
+import bookinfo from "@/utils/editConfig.js";
 import { reactive, toRefs, watchEffect } from "vue";
 import store from "@/store";
 
@@ -30,7 +30,8 @@ export default {
     });
 
     const upData = (newContent) => {
-      console.log(newContent);
+      // console.log(newContent);
+      store.commit("changeBookItemNewContent", newContent);
     };
     watchEffect(() => {
       data.bookContent = store.state.bookItemContent;

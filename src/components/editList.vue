@@ -23,7 +23,7 @@
           <div style="margin-left: 10px">
             <div class="book_info">
               <span>{{ data.bookSourceName }}</span>
-              <span>最后修改：{{ formateTime(data.lastUpdateTime) }}</span>
+              <span>最后修改：{{ formatTime(data.lastUpdateTime) }}</span>
             </div>
             <div>{{ data.bookSourceUrl }}</div>
           </div>
@@ -51,7 +51,7 @@ export default {
       store.commit("changeBookItemContent", data.bookSources[index]);
     };
 
-    const formateTime = (date) => {
+    const formatTime = (date) => {
       const time = new Date(date);
       const year = time.getFullYear();
 
@@ -88,7 +88,12 @@ export default {
       data.bookSources = store.state.bookSource;
     });
 
-    return { currentActive, handleItemClick, ...toRefs(data), formateTime };
+    return {
+      currentActive,
+      handleItemClick,
+      ...toRefs(data),
+      formatTime,
+    };
   },
 };
 </script>

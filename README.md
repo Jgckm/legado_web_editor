@@ -1,5 +1,8 @@
 # legado_web_editor
 
+## 已知的BUG
+- 清空表单无法清除自己输入的
+
 ## Project setup
 ```
 npm install

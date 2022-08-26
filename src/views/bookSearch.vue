@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import bookinfo from "@/assets/editConfig";
+import bookinfo from "@/utils/editConfig";
 import editInput from "@/components/editInput";
 
 import { reactive, toRefs } from "vue";

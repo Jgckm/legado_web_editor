@@ -14,9 +14,15 @@ export default createStore({
     changeSource(state, data) {
       state.bookSource = data;
     },
+    // editList Click
     changeBookItemContent(state, content) {
       state.bookItemContent = content;
       console.log(content);
+    },
+    // edit Content
+    changeBookItemNewContent(state, newContent) {
+      state.bookItemContent[newContent.type] = newContent.value;
+      console.log(newContent);
     },
     clearEdit(state) {
       state.bookItemContent = {};
