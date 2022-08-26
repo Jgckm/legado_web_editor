@@ -10,7 +10,7 @@
         :text="successText"
       ></edit-success>
     </div>
-    <button @click="handleClick">⇈推送源</button>
+    <button @click="push">⇈推送源</button>
     <button @click="pull">⇊拉取源</button>
     <button @click="handleClick">⋙生成源</button>
     <button @click="clearEdit">✗清空表单</button>
@@ -69,6 +69,43 @@ export default {
           localStorage.setItem("url", "");
         });
     };
+    const push = () => {
+      http(store.state.url, "saveBookSources", store.state.bookSource)
+        .then((json) => {
+          if (json.isSuccess) {
+            let okData = json.data;
+            if (Array.isArray(okData)) {
+              let failMsg = ``;
+              if (store.state.bookSource.length > okData.length) {
+                store.state.bookSource.forEach((item) => {
+                  if (
+                    !okData.find((x) => x.bookSourceUrl === item.bookSourceUrl)
+                  ) {
+                    console.log(item.bookSourceUrl);
+                  }
+                });
+                failMsg = "\n推送失败的源将用红色字体标注!";
+              }
+              successText.value = `批量推送源到「阅读3.0APP」\n共计: ${
+                store.state.bookSource.length
+              } 条\n成功: ${okData.length} 条\n失败: ${
+                store.state.bookSource.length - okData.length
+              } 条${failMsg}`;
+              successShow.value = true;
+            } else {
+              successText.value = `批量推送源到「阅读3.0APP」成功!\n共计: ${store.state.bookSource.length} 条`;
+              successShow.value = true;
+            }
+          } else {
+            // alert(`批量推送源失败!\nErrorMsg: ${json.errorMsg}`);
+            warnShow.value = true;
+          }
+        })
+        .catch((err) => {
+          // console.log(err);
+          warnShow.value = true;
+        });
+    };
     const clearEdit = () => {
       store.commit("clearEdit");
       console.log("已清除");
@@ -78,6 +115,7 @@ export default {
 
     return {
       handleClick,
+      push,
       pull,
       clearEdit,
       isShow,

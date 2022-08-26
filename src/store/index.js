@@ -17,12 +17,12 @@ export default createStore({
     // editList Click
     changeBookItemContent(state, content) {
       state.bookItemContent = content;
-      console.log(content);
+      // console.log(content);
     },
     // edit Content
     changeBookItemNewContent(state, newContent) {
       state.bookItemContent[newContent.type] = newContent.value;
-      console.log(newContent);
+      // console.log(newContent);
     },
     clearEdit(state) {
       state.bookItemContent = {};
