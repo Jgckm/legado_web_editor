@@ -7,7 +7,8 @@
       :hint="item.hint"
       :title="item.title"
       :rows="item.rows"
-      content="bookContent[item.id]"
+      :content="bookContent[item.id]"
+      @changeContent="upData"
     ></edit-input>
   </div>
 </template>
@@ -28,11 +29,15 @@ export default {
       bookContent: store.state.bookItemContent,
     });
 
+    const upData = (newContent) => {
+      console.log(newContent);
+    };
     watchEffect(() => {
       data.bookContent = store.state.bookItemContent;
     });
     return {
       ...toRefs(data),
+      upData,
     };
   },
 };

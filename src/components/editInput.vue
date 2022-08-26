@@ -35,10 +35,10 @@ export default {
       default: "",
     },
   },
-  emits: ["content"],
-  setup(prosp, { emit }) {
+  emits: ["changeContent"],
+  setup(props, { emit }) {
     const change = () => {
-      emit("");
+      emit("changeContent", props.content);
     };
     return {
       change,

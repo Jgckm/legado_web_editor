@@ -1,5 +1,6 @@
 <template>
   <div class="menu">
+    <edit-warm :is-show="warnShow" @changeShow="changeShow"></edit-warm>
     <button @click="handleClick">⇈推送源</button>
     <button @click="pull">⇊拉取源</button>
     <button @click="handleClick">⋘编辑源</button>
@@ -15,16 +16,22 @@
 
 <script>
 import { http } from "@/utils/http";
-import store from "@/store";
-import editLoading from "@/components/editLoading";
 import { ref } from "vue";
 
+import store from "@/store";
+import editLoading from "@/components/editLoading";
+import editWarm from "@/components/editWarm";
+
 export default {
-  components: { editLoading },
+  components: { editLoading, editWarm },
   setup() {
     const isShow = ref(false);
+    const warnShow = ref(false);
     const handleClick = () => {
       console.log(1111);
+    };
+    const changeShow = (bool) => {
+      warnShow.value = bool;
     };
     const pull = () => {
       isShow.value = true;
@@ -38,6 +45,8 @@ export default {
         .catch((err) => {
           console.log(err);
           isShow.value = false;
+          warnShow.value = true;
+          localStorage.setItem("url", "");
         });
     };
     const conver = () => {};
@@ -47,6 +56,8 @@ export default {
       pull,
       conver,
       isShow,
+      changeShow,
+      warnShow,
     };
   },
 };
