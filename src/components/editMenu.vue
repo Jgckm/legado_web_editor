@@ -12,7 +12,7 @@
     </div>
     <button @click="push">⇈推送源</button>
     <button @click="pull">⇊拉取源</button>
-    <button @click="handleClick">⋙生成源</button>
+    <button @click="conver">⋙生成源</button>
     <button @click="clearEdit">✗清空表单</button>
     <button @click="handleClick">↶撤销操作</button>
     <button @click="handleClick">↷重做操作</button>
@@ -56,6 +56,7 @@ export default {
       console.log(store.state.url);
       http(store.state.url, "getBookSources")
         .then((res) => {
+          store.commit("changeTabName", "editList");
           store.commit("changeSource", res.data);
           localStorage.setItem("url", store.state.url);
           isShow.value = false;
@@ -69,7 +70,9 @@ export default {
           localStorage.setItem("url", "");
         });
     };
+
     const push = () => {
+      isShow.value = true;
       http(store.state.url, "saveBookSources", store.state.bookSource)
         .then((json) => {
           if (json.isSuccess) {
@@ -100,11 +103,17 @@ export default {
             // alert(`批量推送源失败!\nErrorMsg: ${json.errorMsg}`);
             warnShow.value = true;
           }
+          isShow.value = false;
         })
         .catch((err) => {
           // console.log(err);
+          isShow.value = false;
           warnShow.value = true;
         });
+    };
+
+    const conver = () => {
+      store.commit("changeTabName", "editTab");
     };
     const clearEdit = () => {
       store.commit("clearEdit");
@@ -124,6 +133,7 @@ export default {
       successText,
       changeSuccessShow,
       successShow,
+      conver,
     };
   },
 };

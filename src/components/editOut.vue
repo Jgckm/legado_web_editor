@@ -49,7 +49,7 @@ import editDebug from "@/components/editDebug";
 import editList from "@/components/editList";
 import editHelp from "@/components/editHelp";
 
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, watchEffect } from "vue";
 import store from "@/store";
 
 export default {
@@ -63,11 +63,11 @@ export default {
   setup() {
     const data = reactive({
       url: localStorage.getItem("url") || "",
-      current_tab: localStorage.getItem("tabName") || "editTab",
+      current_tab: store.state.currentTab || "editTab",
     });
 
     const handleSetActive = (tabName) => {
-      data.current_tab = tabName;
+      store.commit("changeTabName", tabName);
       localStorage.setItem("tabName", tabName);
     };
 
@@ -75,6 +75,9 @@ export default {
       store.commit("changeUrl", url);
     };
 
+    watchEffect(() => {
+      data.current_tab = store.state.currentTab;
+    });
     return {
       ...toRefs(data),
       handleSetActive,
