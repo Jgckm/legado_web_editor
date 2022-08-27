@@ -1,7 +1,7 @@
 <template>
   <textarea
     placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"
-    v-html="sourceInfo"
+    v-model="sourceInfo"
   ></textarea>
 </template>
 <script>
@@ -17,7 +17,7 @@ export default {
     watchEffect(() => {
       let sourceInfo = store.state.editTabSourceInfo;
       if (Object.keys(sourceInfo).length > 0) {
-        data.sourceInfo = sourceInfo;
+        sourceInfo.lastUpdateTime = new Date().getTime();
         data.sourceInfo = JSON.stringify(sourceInfo, null, 4);
       }
     });

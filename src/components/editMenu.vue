@@ -113,6 +113,7 @@ export default {
     };
 
     const conver = () => {
+      store.commit("changeEidtTabSourceInfo");
       store.commit("changeTabName", "editTab");
     };
 

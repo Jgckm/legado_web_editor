@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import source_json from "@/utils/bookSource.json";
+
 export default createStore({
   state: {
     url: localStorage.getItem("url") || "",
@@ -25,24 +26,34 @@ export default createStore({
     // edit Content
     changeBookItemNewContent(state, newContent) {
       state.bookItemContent[newContent.type] = newContent.value;
-      // console.log(newContent);
+      // edit last time
+      state.bookItemContent.lastUpdateTime = new Date().getTime();
+      // console.log(state.bookItemContent);
     },
     // update editTab tabName and editTab info
     changeTabName(state, tabName) {
       state.currentTab = tabName;
       localStorage.setItem("tabName", tabName);
-      if (tabName === "editTab") {
-        state.bookItemContent.lastUpdateTime = new Date().getTime();
-        state.editTabSourceInfo = state.bookItemContent;
-        console.log(new Date().getTime());
-      }
+
       console.log(tabName);
+    },
+    changeEidtTabSourceInfo(state) {
+      console.log(state.bookItemContent);
+      // edit last time
+      for (const sourceJsonKey in source_json) {
+        state.editTabSourceInfo[sourceJsonKey] = source_json[sourceJsonKey];
+      }
+      for (const bookItemContentKey in state.bookItemContent) {
+        state.editTabSourceInfo[bookItemContentKey] =
+          state.bookItemContent[bookItemContentKey];
+      }
     },
     editHistory(state, history) {
       if (state.editHistory.new.length === 50) {
         state.editHistory.new.shift();
       }
       state.editHistory.new.push(history);
+      // console.log(state.editHistory.new);
     },
     editHistoryUndo(state) {
       if (state.editHistory.old.length === 50) {
