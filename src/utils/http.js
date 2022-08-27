@@ -1,12 +1,11 @@
 /**
  *  发送后端请求
- * @param url 后端地址
  * @param type 请求资源URL
  * @param data 保存数据
  * @returns {Promise<any>}
  */
-function http(url, type, data) {
-  const formatUrl = `http://${url}/${type}`;
+function http(type, data) {
+  const formatUrl = `http://${localStorage.getItem("url") || ""}/${type}`;
   switch (type) {
     case "getBookSources":
       return fetch(formatUrl).then((res) => res.json());

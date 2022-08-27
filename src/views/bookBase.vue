@@ -28,11 +28,9 @@ export default {
       data: bookinfo.base,
       bookContent: store.state.bookItemContent,
     });
-
     const upData = (newContent) => {
       // console.log(newContent);
       store.commit("changeBookItemNewContent", newContent);
-      store.commit("editHistory", data.bookContent);
     };
     watchEffect(() => {
       data.bookContent = store.state.bookItemContent;

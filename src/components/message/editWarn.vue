@@ -1,8 +1,7 @@
 <template>
   <div v-if="isShow" class="warm">
     <p>
-      请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP
-      确认开启web服务
+      {{ text }}
     </p>
 
     <div>
@@ -18,6 +17,10 @@ export default {
     isShow: {
       default: false,
       type: Boolean,
+    },
+    text: {
+      type: String,
+      default: "",
     },
   },
   setup(props, { emit }) {

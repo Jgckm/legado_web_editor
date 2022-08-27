@@ -74,6 +74,9 @@ export default createStore({
         localStorage.setItem("history", JSON.stringify(historyObj));
       }
     },
+    clearAllHistory() {
+      localStorage.setItem("history", JSON.stringify({ new: [], old: [] }));
+    },
     clearEdit(state) {
       state.bookItemContent = {};
     },

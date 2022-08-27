@@ -2,7 +2,11 @@
   <div class="menu">
     <div>
       <edit-loading v-if="isShow"></edit-loading>
-      <edit-warn :is-show="warnShow" @changeShow="changeShow"></edit-warn>
+      <edit-warn
+        :text="warnText"
+        :is-show="warnShow"
+        @changeShow="changeShow"
+      ></edit-warn>
       <edit-success
         v-if="successShow"
         :isShow="successShow"
@@ -15,9 +19,9 @@
     <button @click="conver">⋙生成源</button>
     <button @click="clearEdit">✗清空表单</button>
     <button @click="undo">↶撤销操作</button>
-    <button @click="handleClick">↷重做操作</button>
+    <button @click="redo">↷重做操作</button>
     <button @click="handleClick">⇏调试源</button>
-    <button @click="handleClick">✓保存源</button>
+    <button @click="saveSource">✓保存源</button>
   </div>
 </template>
 
@@ -34,10 +38,10 @@ export default {
   components: { editLoading, editWarn, editSuccess },
   setup() {
     const isShow = ref(false); // loading
-    const warnShow = ref(false); // warn^
+    const warnShow = ref(false); // warn
     const successText = ref(""); // successText
     const successShow = ref(false); // success
-
+    const warnText = ref(""); // warnText
     const handleClick = () => {
       console.log(1111);
     };
@@ -54,7 +58,7 @@ export default {
     const pull = () => {
       isShow.value = true;
       console.log(store.state.url);
-      http(store.state.url, "getBookSources")
+      http("getBookSources")
         .then((res) => {
           store.commit("changeTabName", "editList");
           store.commit("changeSource", res.data);
@@ -66,6 +70,8 @@ export default {
         .catch((err) => {
           console.log(err);
           isShow.value = false;
+          warnText.value =
+            " 请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务";
           warnShow.value = true;
           localStorage.setItem("url", "");
         });
@@ -73,7 +79,7 @@ export default {
 
     const push = () => {
       isShow.value = true;
-      http(store.state.url, "saveBookSources", store.state.bookSource)
+      http("saveBookSources", store.state.bookSource)
         .then((json) => {
           if (json.isSuccess) {
             let okData = json.data;
@@ -101,6 +107,7 @@ export default {
             }
           } else {
             // alert(`批量推送源失败!\nErrorMsg: ${json.errorMsg}`);
+            warnText.value = `批量推送源失败!\nErrorMsg: ${json.errorMsg}`;
             warnShow.value = true;
           }
           isShow.value = false;
@@ -109,6 +116,7 @@ export default {
           // console.log(err);
           isShow.value = false;
           warnShow.value = true;
+          warnText.value = `请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务`;
         });
     };
 
@@ -126,7 +134,32 @@ export default {
       successText.value = "已清除";
       successShow.value = true;
     };
-
+    const redo = () => {
+      store.commit("clearEdit");
+      store.commit("clearAllHistory");
+      successText.value = "已清除所有历史记录";
+      successShow.value = true;
+    };
+    const saveSource = () => {
+      if (
+        store.state.bookItemContent.bookSourceUrl !== "" &&
+        store.state.bookItemContent.bookSourceType !== "" &&
+        store.state.bookItemContent.bookSourceName
+      ) {
+        http("saveBookSources", store.state.bookItemContent).then((res) => {
+          if (res.isSuccess) {
+            successText.value = `源《${store.state.bookItemContent.bookSourceName}》已成功保存到「阅读3.0APP」`;
+            successShow.value = true;
+          } else {
+            warnText.value = `源《${store.state.bookItemContent.bookSourceName}》保存失败!\nErrorMsg: ${res.errorMsg}`;
+            warnShow.value = true;
+          }
+        });
+      } else {
+        warnText.value = `请检查你的 源域名 源名称 源类型 <必填>项是否全部填写`;
+        warnShow.value = true;
+      }
+    };
     return {
       handleClick,
       push,
@@ -140,6 +173,9 @@ export default {
       successShow,
       conver,
       undo,
+      redo,
+      warnText,
+      saveSource,
     };
   },
 };

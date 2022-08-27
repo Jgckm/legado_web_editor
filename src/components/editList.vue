@@ -56,10 +56,10 @@ export default {
       const time = new Date(date);
       const year = time.getFullYear();
 
-      let month = time.getMonth();
+      let month = time.getMonth() + 1;
       month = month < 10 ? "0" + month : month;
 
-      let day = time.getDay();
+      let day = time.getDate();
       day = day < 10 ? "0" + day : day;
 
       let hour = time.getHours();
@@ -69,7 +69,7 @@ export default {
       minute = minute < 10 ? "0" + minute : minute;
 
       let seconds = time.getSeconds();
-      seconds = minute = seconds < 10 ? "0" + seconds : seconds;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
 
       return (
         year +

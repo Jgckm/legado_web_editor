@@ -8,12 +8,14 @@
       :value="content"
       ref="attr"
       @input="change"
+      @blur="changeHistory"
     ></textarea>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
+import store from "@/store";
 
 export default {
   props: {
@@ -47,7 +49,30 @@ export default {
         type: attr.value.getAttribute("id"),
       });
     };
+    const changeHistory = () => {
+      if (!localStorage.getItem("history")) {
+        localStorage.setItem("history", JSON.stringify({ new: [], old: [] }));
+      }
+      const history = JSON.parse(localStorage.getItem("history"));
+
+      const newHistory = history.new;
+      if (newHistory.length) {
+        if (
+          newHistory[newHistory.length - 1][attr.value.getAttribute("id")] !==
+          store.state.bookItemContent[attr.value.getAttribute("id")]
+        ) {
+          store.commit("editHistory", store.state.bookItemContent);
+        } else {
+          console.log("重复的");
+        }
+      } else {
+        store.commit("editHistory", store.state.bookItemContent);
+        console.log("第一次");
+      }
+    };
+
     return {
+      changeHistory,
       change,
       attr,
     };
