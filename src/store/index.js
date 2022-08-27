@@ -25,9 +25,17 @@ export default createStore({
     },
     // edit Content
     changeBookItemNewContent(state, newContent) {
-      state.bookItemContent[newContent.type] = newContent.value;
-      // edit last time
-      state.bookItemContent.lastUpdateTime = new Date().getTime();
+      if (newContent.type.includes("_")) {
+        let rule1 = newContent.type.split("_")[0];
+        let rule2 = newContent.type.split("_")[1];
+        state.bookItemContent[rule1][rule2] = newContent.value;
+        // console.log(rule1, rule2);
+        // console.log(newContent);
+      } else {
+        state.bookItemContent[newContent.type] = newContent.value;
+        // edit last time
+        state.bookItemContent.lastUpdateTime = new Date().getTime();
+      }
       // console.log(state.bookItemContent);
     },
     // update editTab tabName and editTab info
@@ -79,10 +87,10 @@ export default createStore({
       localStorage.setItem("history", JSON.stringify({ new: [], old: [] }));
     },
     clearEdit(state) {
-      state.bookItemContent = {};
+      state.bookItemContent = source_json;
     },
     changeDeBugMsg(state, msg) {
-      let el = document.querySelector(".debug_text");
+      let el = document.querySelector("#debug_text");
       el.scrollTop = el.scrollHeight;
       state.deBugMsg = state.deBugMsg + msg + "\n";
     },

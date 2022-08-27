@@ -34,7 +34,6 @@ export default {
     };
     watchEffect(() => {
       data.bookContent = store.state.bookItemContent;
-      console.log("bookItemContent  变化了");
     });
     return {
       ...toRefs(data),

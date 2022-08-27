@@ -63,7 +63,20 @@ export default {
         ) {
           store.commit("editHistory", store.state.bookItemContent);
         } else {
-          console.log("重复的");
+          const idName = attr.value.getAttribute("id");
+          if (idName.includes("_")) {
+            let rule1 = idName.split("_")[0];
+            let rule2 = idName.split("_")[1];
+            if (
+              newHistory[newHistory.length - 1][rule1][rule2] !==
+              store.state.bookItemContent[rule1][rule2]
+            ) {
+              store.commit("editHistory", store.state.bookItemContent);
+              console.log("添加");
+            }
+          } else {
+            console.log("重复的");
+          }
         }
       } else {
         store.commit("editHistory", store.state.bookItemContent);

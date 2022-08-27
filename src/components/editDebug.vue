@@ -8,7 +8,7 @@
     placeholder="这里用于输出调试信息"
     v-model="printDebug"
     ref="textareaDom"
-    class="debug_text"
+    id="debug_text"
   ></textarea>
 </template>
 
