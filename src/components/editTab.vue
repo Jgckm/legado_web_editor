@@ -17,8 +17,7 @@ export default {
     watchEffect(() => {
       let sourceInfo = store.state.editTabSourceInfo;
       if (Object.keys(sourceInfo).length > 0) {
-        sourceInfo.lastUpdateTime = new Date().getTime();
-        console.log(new Date().getTime());
+        data.sourceInfo = sourceInfo;
         data.sourceInfo = JSON.stringify(sourceInfo, null, 4);
       }
     });

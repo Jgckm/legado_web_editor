@@ -32,7 +32,9 @@ export default createStore({
       state.currentTab = tabName;
       localStorage.setItem("tabName", tabName);
       if (tabName === "editTab") {
+        state.bookItemContent.lastUpdateTime = new Date().getTime();
         state.editTabSourceInfo = state.bookItemContent;
+        console.log(new Date().getTime());
       }
       console.log(tabName);
     },
