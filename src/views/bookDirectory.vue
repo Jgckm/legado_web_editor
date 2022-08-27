@@ -7,6 +7,8 @@
       :hint="item.hint"
       :title="item.title"
       :rows="item.rows"
+      :content="setContent(item.id)"
+      @changeContent="upData"
     ></edit-input>
   </div>
 </template>
@@ -15,17 +17,22 @@
 import editInput from "@/components/editInput";
 import bookinfo from "@/utils/editConfig.js";
 import { reactive, toRefs } from "vue";
+import useCounter from "@/utils/useCounter";
 
 export default {
   components: {
     editInput,
   },
   setup() {
+    const { upData, setContent, bookContent } = useCounter();
     const data = reactive({
       data: bookinfo.directory,
     });
     return {
       ...toRefs(data),
+      upData,
+      setContent,
+      bookContent,
     };
   },
 };
