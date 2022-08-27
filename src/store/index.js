@@ -8,7 +8,6 @@ export default createStore({
     bookItemContent: source_json, // 当前点击的书源项
     currentTab: localStorage.getItem("tabName") || "editTab",
     editTabSourceInfo: {},
-    editHistory: { new: [], old: [] },
   },
   getters: {},
   mutations: {
@@ -49,19 +48,31 @@ export default createStore({
       }
     },
     editHistory(state, history) {
-      if (state.editHistory.new.length === 50) {
-        state.editHistory.new.shift();
+      let historyObj;
+      if (localStorage.getItem("history")) {
+        historyObj = JSON.parse(localStorage.getItem("history"));
+        historyObj.new.push(history);
+        if (historyObj.new.length > 50) {
+          historyObj.new.shift();
+        }
+        if (historyObj.old.length > 50) {
+          historyObj.old.shift();
+        }
+        localStorage.setItem("history", JSON.stringify(historyObj));
+      } else {
+        const arr = { new: [history], old: [] };
+        localStorage.setItem("history", JSON.stringify(arr));
       }
-      state.editHistory.new.push(history);
-      // console.log(state.editHistory.new);
     },
     editHistoryUndo(state) {
-      if (state.editHistory.old.length === 50) {
-        state.editHistory.old.shift();
+      if (localStorage.getItem("history")) {
+        let historyObj = JSON.parse(localStorage.getItem("history"));
+        historyObj.old.push(state.bookItemContent);
+        if (historyObj.new.length) {
+          state.bookItemContent = historyObj.new.pop();
+        }
+        localStorage.setItem("history", JSON.stringify(historyObj));
       }
-      state.editHistory.old.push(state.bookItemContent);
-      // state.bookItemContent = state.editHistory.new.pop();
-      console.log("撤销", state.editHistory.new.pop());
     },
     clearEdit(state) {
       state.bookItemContent = {};
