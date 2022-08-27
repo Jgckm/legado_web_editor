@@ -8,6 +8,7 @@ export default createStore({
     bookItemContent: source_json, // 当前点击的书源项
     currentTab: localStorage.getItem("tabName") || "editTab",
     editTabSourceInfo: {},
+    deBugMsg: "",
   },
   getters: {},
   mutations: {
@@ -79,6 +80,14 @@ export default createStore({
     },
     clearEdit(state) {
       state.bookItemContent = {};
+    },
+    changeDeBugMsg(state, msg) {
+      let el = document.querySelector(".debug_text");
+      el.scrollTop = el.scrollHeight;
+      state.deBugMsg = state.deBugMsg + msg + "\n";
+    },
+    deBugMsgClear(state) {
+      state.deBugMsg = "";
     },
   },
   actions: {},

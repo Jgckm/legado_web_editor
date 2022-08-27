@@ -4,14 +4,32 @@
     style="text-align: center"
     placeholder="输入搜索关键字，默认搜「我的」"
   />
-  <textarea placeholder="这里用于输出调试信息"></textarea>
+  <textarea
+    placeholder="这里用于输出调试信息"
+    v-model="printDebug"
+    ref="textareaDom"
+    class="debug_text"
+  ></textarea>
 </template>
 
 <script>
+import { reactive, ref, toRefs, watchEffect } from "vue";
+import store from "@/store";
+
 export default {
   name: "editDebug",
   setup() {
-    return {};
+    const textareaDom = ref("");
+    const data = reactive({
+      printDebug: store.state.deBugMsg,
+    });
+    watchEffect(() => {
+      data.printDebug = store.state.deBugMsg;
+    });
+    return {
+      ...toRefs(data),
+      textareaDom,
+    };
   },
 };
 </script>

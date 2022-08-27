@@ -20,7 +20,7 @@
     <button @click="clearEdit">✗清空表单</button>
     <button @click="undo">↶撤销操作</button>
     <button @click="redo">↷重做操作</button>
-    <button @click="handleClick">⇏调试源</button>
+    <button @click="debug">⇏调试源</button>
     <button @click="saveSource">✓保存源</button>
   </div>
 </template>
@@ -42,9 +42,7 @@ export default {
     const successText = ref(""); // successText
     const successShow = ref(false); // success
     const warnText = ref(""); // warnText
-    const handleClick = () => {
-      console.log(1111);
-    };
+
     // warnShow
     const changeShow = (bool) => {
       warnShow.value = bool;
@@ -160,8 +158,31 @@ export default {
         warnShow.value = true;
       }
     };
+    const debug = () => {
+      store.commit("deBugMsgClear");
+      store.commit("changeTabName", "editDebug");
+      http("saveBookSources", store.state.bookItemContent).then((res) => {
+        const socket = new WebSocket(
+          `ws://` +
+            store.state.url.replace(/\d+$/, (port) => parseInt(port) + 1) +
+            `/bookSourceDebug`
+        );
+        let sKey = "我的";
+        socket.onopen = () => {
+          socket.send(
+            `{"tag":"${store.state.bookItemContent.bookSourceUrl}", "key":"${sKey}"}`
+          );
+        };
+        socket.onmessage = (msg) => {
+          store.commit("changeDeBugMsg", msg.data);
+        };
+        socket.onclose = () => {
+          store.commit("changeDeBugMsg", "调试已关闭！");
+        };
+      });
+    };
     return {
-      handleClick,
+      debug,
       push,
       pull,
       clearEdit,
@@ -171,9 +192,9 @@ export default {
       successText,
       changeSuccessShow,
       successShow,
-      conver,
       undo,
       redo,
+      conver,
       warnText,
       saveSource,
     };
@@ -200,6 +221,7 @@ button {
   box-sizing: border-box;
   border: #333333 solid 1px;
   background-color: transparent;
+
   &:hover {
     color: #ffffff;
     background-color: gray;
