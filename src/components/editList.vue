@@ -3,6 +3,8 @@
     <input
       type="text"
       placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
+      v-model="searchKey"
+      @input="sourcesList(searchKey)"
     />
     <div>
       <div class="tool">
@@ -13,7 +15,7 @@
       </div>
       <div class="book_list">
         <div
-          v-for="(data, index) in bookSources"
+          v-for="(data, index) in sourcesList(searchKey)"
           :key="index"
           class="book_item"
           v-bind:class="index === currentActive ? 'book_active' : ''"
@@ -44,6 +46,7 @@ export default {
   setup() {
     let data = reactive({
       bookSources: store.state.bookSource,
+      searchKey: "",
     });
 
     let currentActive = ref(null);
@@ -51,7 +54,6 @@ export default {
       currentActive.value = index;
       store.commit("clearEdit");
       store.commit("changeBookItemContent", data.bookSources[index]);
-      console.log("清除");
     };
 
     const formatTime = (date) => {
@@ -87,6 +89,23 @@ export default {
         seconds
       );
     };
+    const sourcesList = (key) => {
+      if (key === "") {
+        return data.bookSources;
+      } else {
+        return (
+          store.state.bookSource.filter((item) =>
+            item.bookSourceName.toUpperCase().includes(key.toUpperCase())
+          ) ||
+          store.state.bookSource.filter((item) =>
+            item.bookSourceGroup.toUpperCase().includes(key.toUpperCase())
+          ) ||
+          store.state.bookSource.filter((item) =>
+            item.bookSourceUrl.toUpperCase().includes(key.toUpperCase())
+          )
+        );
+      }
+    };
     watchEffect(() => {
       data.bookSources = store.state.bookSource;
     });
@@ -96,6 +115,7 @@ export default {
       handleItemClick,
       ...toRefs(data),
       formatTime,
+      sourcesList,
     };
   },
 };
