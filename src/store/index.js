@@ -21,7 +21,8 @@ export default createStore({
     },
     // editList Click
     changeBookItemContent(state, content) {
-      state.bookItemContent = { ...content };
+      const newContent = JSON.stringify(content);
+      state.bookItemContent = JSON.parse(newContent);
       // console.log(content);
     },
     // edit Content
@@ -30,7 +31,7 @@ export default createStore({
         let rule1 = newContent.type.split("_")[0];
         let rule2 = newContent.type.split("_")[1];
         state.bookItemContent[rule1][rule2] = newContent.value;
-        // console.log(rule1, rule2);
+        // console.log(rule1, rule2, state.bookItemContent);
         // console.log(newContent);
       } else {
         state.bookItemContent[newContent.type] = newContent.value;
