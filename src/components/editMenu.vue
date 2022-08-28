@@ -71,7 +71,7 @@ export default {
           warnText.value =
             " 请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务";
           warnShow.value = true;
-          localStorage.setItem("url", "");
+          store.commit("changeUrl", "");
         });
     };
 
@@ -142,7 +142,7 @@ export default {
       if (
         store.state.bookItemContent.bookSourceUrl !== "" &&
         store.state.bookItemContent.bookSourceType !== "" &&
-        store.state.bookItemContent.bookSourceName
+        store.state.bookItemContent.bookSourceName !== ""
       ) {
         http("saveBookSources", store.state.bookItemContent).then((res) => {
           if (res.isSuccess) {
@@ -167,7 +167,8 @@ export default {
             store.state.url.replace(/\d+$/, (port) => parseInt(port) + 1) +
             `/bookSourceDebug`
         );
-        let sKey = "我的";
+        let sKey =
+          store.state.bookItemContent["ruleSearch"]["checkKeyWord"] || "我的";
         socket.onopen = () => {
           socket.send(
             `{"tag":"${store.state.bookItemContent.bookSourceUrl}", "key":"${sKey}"}`

@@ -14,13 +14,15 @@ export default createStore({
   mutations: {
     changeUrl(state, url) {
       state.url = url;
+      localStorage.setItem("url", url);
     },
     changeSource(state, data) {
       state.bookSource = data;
     },
     // editList Click
     changeBookItemContent(state, content) {
-      state.bookItemContent = content;
+      const newContent = { ...content };
+      state.bookItemContent = newContent;
       // console.log(content);
     },
     // edit Content

@@ -49,7 +49,9 @@ export default {
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
+      store.commit("clearEdit");
       store.commit("changeBookItemContent", data.bookSources[index]);
+      console.log("清除");
     };
 
     const formatTime = (date) => {
