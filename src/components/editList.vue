@@ -13,31 +13,30 @@
         <button @click="deleteActiveSource">删除选中源</button>
         <button @click="clearAllSources">清空列表</button>
       </div>
+
       <div class="book_list">
         <div
           v-for="(data, index) in sourcesList(searchKey)"
-          :key="index"
+          :key="data.bookSourceUrl"
           class="book_item"
           v-bind:class="index === currentActive ? 'book_active' : ''"
-          @click="handleItemClick(index)"
         >
+          <input type="checkbox" :value="index" v-model="delArr" />
           <div class="book_index">{{ index + 1 }}</div>
-          <div style="margin-left: 10px; flex: 1">
+          <div
+            style="margin-left: 10px; flex: 1"
+            @click="handleItemClick(index)"
+          >
             <div class="book_info">
               <span>{{ data.bookSourceName }}</span>
               <span>最后修改：{{ formatTime(data.lastUpdateTime) }}</span>
-              <span>分组：{{ data.bookSourceGroup }}</span>
+              <span>分组：{{ data.bookSourceGroup || "无分组" }}</span>
             </div>
             <div>{{ data.bookSourceUrl }}</div>
           </div>
         </div>
       </div>
     </div>
-    <edit-success
-      :text="successText"
-      :isShow="succesIsShow"
-      @changeShow="isShowSuccess"
-    ></edit-success>
   </div>
 </template>
 
@@ -45,28 +44,22 @@
 import { reactive, ref, toRefs, watchEffect } from "vue";
 import store from "@/store";
 import { http } from "@/utils/http";
-import editSuccess from "@/components/message/editSuccess";
 
 export default {
   name: "editList",
-  components: {
-    editSuccess,
-  },
+
   setup() {
+    const bookSources = ref(store.state.bookSource);
     let data = reactive({
-      bookSources: store.state.bookSource,
       searchKey: "",
-      successText: "",
-      succesIsShow: false,
+      delArr: [],
     });
-    const isShowSuccess = (show) => {
-      data.succesIsShow = show;
-    };
+
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
       store.commit("clearEdit");
-      store.commit("changeBookItemContent", data.bookSources[index]);
+      store.commit("changeBookItemContent", bookSources.value[index]);
     };
     const clearAllSources = () => {
       store.commit("clearAllSource");
@@ -106,16 +99,16 @@ export default {
     };
     const sourcesList = (key) => {
       if (key === "") {
-        return data.bookSources;
+        return bookSources.value;
       } else {
         return (
-          store.state.bookSource.filter((item) =>
+          bookSources.value.filter((item) =>
             item.bookSourceName.toUpperCase().includes(key.toUpperCase())
           ) ||
-          store.state.bookSource.filter((item) =>
+          bookSources.value.filter((item) =>
             item.bookSourceGroup.toUpperCase().includes(key.toUpperCase())
           ) ||
-          store.state.bookSource.filter((item) =>
+          bookSources.value.filter((item) =>
             item.bookSourceUrl.toUpperCase().includes(key.toUpperCase())
           )
         );
@@ -123,14 +116,26 @@ export default {
     };
 
     watchEffect(() => {
-      data.bookSources = store.state.bookSource;
+      bookSources.value = store.state.bookSource;
     });
 
     const deleteActiveSource = () => {
-      http("deleteBookSources", store.state.bookItemContent).then((res) => {
+      const delSources = [];
+      const source = sourcesList(data.searchKey);
+      data.delArr.forEach((item) => {
+        delSources.push(source[item]);
+      });
+
+      http("deleteBookSources", delSources).then((res) => {
         if (res.isSuccess) {
-          data.successText = "删除成功！";
-          data.succesIsShow = true;
+          console.log("删除成功");
+          data.delArr.forEach((item) => {
+            source.splice(item, 1);
+            console.log(item);
+          });
+          data.delArr = [];
+        } else {
+          console.log("错误", res);
         }
       });
     };
@@ -142,7 +147,7 @@ export default {
       formatTime,
       sourcesList,
       clearAllSources,
-      isShowSuccess,
+      bookSources,
     };
   },
 };
@@ -165,7 +170,10 @@ input {
     margin: 0 2px;
   }
 }
-
+input[type="checkbox"] {
+  transform: scale(2);
+  margin: 0 15px 0;
+}
 .book_item {
   display: flex;
   align-items: center;

@@ -168,7 +168,6 @@ export default {
             `/bookSourceDebug`
         );
         let sKey;
-        console.log(store.state.bookItemContent.ruleSearch.checkKeyWord);
         if (store.state.bookItemContent.ruleSearch.checkKeyWord) {
           sKey = store.state.bookItemContent.ruleSearch.checkKeyWord;
           console.log(sKey, "-------- bookItemContent");

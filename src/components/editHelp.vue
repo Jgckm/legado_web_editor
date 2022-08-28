@@ -35,10 +35,10 @@ a {
   }
 }
 code {
+  display: inline-block;
   font-size: 16px;
   font-family: "Cascadia Mono", "JetBrains Mono", "Microsoft YaHei UI", serif;
   background-color: #f3f4f4;
-  padding: 0 2px 0 2px;
   border-radius: 4px;
 }
 </style>
