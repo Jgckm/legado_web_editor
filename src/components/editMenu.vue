@@ -167,8 +167,18 @@ export default {
             store.state.url.replace(/\d+$/, (port) => parseInt(port) + 1) +
             `/bookSourceDebug`
         );
-        let sKey =
-          store.state.bookItemContent["ruleSearch"]["checkKeyWord"] || "我的";
+        let sKey;
+        console.log(store.state.bookItemContent.ruleSearch.checkKeyWord);
+        if (store.state.bookItemContent.ruleSearch.checkKeyWord) {
+          sKey = store.state.bookItemContent.ruleSearch.checkKeyWord;
+          console.log(sKey, "-------- bookItemContent");
+        } else if (store.state.searchKey) {
+          sKey = store.state.searchKey;
+          console.log(sKey, "----------- searchKey");
+        } else {
+          sKey = "我的";
+          console.log(sKey, "-------------- sKey");
+        }
         socket.onopen = () => {
           socket.send(
             `{"tag":"${store.state.bookItemContent.bookSourceUrl}", "key":"${sKey}"}`

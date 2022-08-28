@@ -10,8 +10,8 @@
       <div class="tool">
         <button>导入书源文件</button>
         <button>导出书源文件</button>
-        <button>删除选中源</button>
-        <button>清空列表</button>
+        <button @click="deleteActiveSource">删除选中源</button>
+        <button @click="clearAllSources">清空列表</button>
       </div>
       <div class="book_list">
         <div
@@ -33,29 +33,44 @@
         </div>
       </div>
     </div>
+    <edit-success
+      :text="successText"
+      :isShow="succesIsShow"
+      @changeShow="isShowSuccess"
+    ></edit-success>
   </div>
 </template>
 
 <script>
 import { reactive, ref, toRefs, watchEffect } from "vue";
 import store from "@/store";
+import { http } from "@/utils/http";
+import editSuccess from "@/components/message/editSuccess";
 
 export default {
   name: "editList",
-
+  components: {
+    editSuccess,
+  },
   setup() {
     let data = reactive({
       bookSources: store.state.bookSource,
       searchKey: "",
+      successText: "",
+      succesIsShow: false,
     });
-
+    const isShowSuccess = (show) => {
+      data.succesIsShow = show;
+    };
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
       store.commit("clearEdit");
       store.commit("changeBookItemContent", data.bookSources[index]);
     };
-
+    const clearAllSources = () => {
+      store.commit("clearAllSource");
+    };
     const formatTime = (date) => {
       const time = new Date(date);
       const year = time.getFullYear();
@@ -106,16 +121,28 @@ export default {
         );
       }
     };
+
     watchEffect(() => {
       data.bookSources = store.state.bookSource;
     });
 
+    const deleteActiveSource = () => {
+      http("deleteBookSources", store.state.bookItemContent).then((res) => {
+        if (res.isSuccess) {
+          data.successText = "删除成功！";
+          data.succesIsShow = true;
+        }
+      });
+    };
     return {
       currentActive,
+      deleteActiveSource,
       handleItemClick,
       ...toRefs(data),
       formatTime,
       sourcesList,
+      clearAllSources,
+      isShowSuccess,
     };
   },
 };

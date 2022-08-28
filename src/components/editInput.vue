@@ -72,15 +72,15 @@ export default {
               store.state.bookItemContent[rule1][rule2]
             ) {
               store.commit("editHistory", store.state.bookItemContent);
-              console.log("添加");
+              console.log("添加记录");
             }
           } else {
-            console.log("重复的");
+            console.log("重复历史，不记录");
           }
         }
       } else {
         store.commit("editHistory", store.state.bookItemContent);
-        console.log("第一次");
+        console.log("第一次记录");
       }
     };
 

@@ -3,6 +3,8 @@
     type="text"
     style="text-align: center"
     placeholder="输入搜索关键字，默认搜「我的」"
+    v-model="searchKey"
+    @input="changeSearch(searchKey)"
   />
   <textarea
     placeholder="这里用于输出调试信息"
@@ -22,13 +24,18 @@ export default {
     const textareaDom = ref("");
     const data = reactive({
       printDebug: store.state.deBugMsg,
+      searchKey: "",
     });
+    const changeSearch = (key) => {
+      store.commit("changeSearchKey", key);
+    };
     watchEffect(() => {
       data.printDebug = store.state.deBugMsg;
     });
     return {
       ...toRefs(data),
       textareaDom,
+      changeSearch,
     };
   },
 };

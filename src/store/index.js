@@ -9,9 +9,13 @@ export default createStore({
     currentTab: localStorage.getItem("tabName") || "editTab",
     editTabSourceInfo: {},
     deBugMsg: "",
+    searchKey: "",
   },
   getters: {},
   mutations: {
+    changeSearchKey(state, key) {
+      state.searchKey = key;
+    },
     changeUrl(state, url) {
       state.url = url;
       localStorage.setItem("url", url);
@@ -101,6 +105,12 @@ export default createStore({
     },
     deBugMsgClear(state) {
       state.deBugMsg = "";
+    },
+
+    // clear all source
+    clearAllSource(state) {
+      state.bookSource = [];
+      console.log("clear all source ");
     },
   },
   actions: {},
