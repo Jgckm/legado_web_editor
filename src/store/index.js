@@ -21,8 +21,7 @@ export default createStore({
     },
     // editList Click
     changeBookItemContent(state, content) {
-      const newContent = { ...content };
-      state.bookItemContent = newContent;
+      state.bookItemContent = { ...content };
       // console.log(content);
     },
     // edit Content
@@ -48,7 +47,6 @@ export default createStore({
       console.log(tabName);
     },
     changeEidtTabSourceInfo(state) {
-      console.log(state.bookItemContent);
       // edit last time
       for (const sourceJsonKey in source_json) {
         state.editTabSourceInfo[sourceJsonKey] = source_json[sourceJsonKey];
@@ -89,7 +87,11 @@ export default createStore({
       localStorage.setItem("history", JSON.stringify({ new: [], old: [] }));
     },
     clearEdit(state) {
-      state.bookItemContent = source_json;
+      state.editTabSourceInfo = {};
+      clearBookItemContent(source_json);
+      state.bookItemContent = { ...source_json };
+      // console.log(source_json);
+      // console.log(state.bookItemContent);
     },
     changeDeBugMsg(state, msg) {
       let el = document.querySelector("#debug_text");
@@ -103,3 +105,12 @@ export default createStore({
   actions: {},
   modules: {},
 });
+function clearBookItemContent(obj) {
+  for (const objKey in obj) {
+    if (typeof obj[objKey] === "object") {
+      clearBookItemContent(obj[objKey]);
+    } else {
+      obj[objKey] = "";
+    }
+  }
+}

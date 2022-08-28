@@ -19,6 +19,8 @@ export default {
       if (Object.keys(sourceInfo).length > 0) {
         sourceInfo.lastUpdateTime = new Date().getTime();
         data.sourceInfo = JSON.stringify(sourceInfo, null, 4);
+      } else {
+        data.sourceInfo = "";
       }
     });
     return {
