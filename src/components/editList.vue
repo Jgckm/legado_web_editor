@@ -9,7 +9,7 @@
     <div>
       <div class="tool">
         <button @click="upFile">导入书源文件</button>
-        <button>导出书源文件</button>
+        <button @click="outExport">导出书源文件</button>
         <button @click="deleteActiveSource">删除选中源</button>
         <button @click="clearAllSources">清空列表</button>
       </div>
@@ -158,6 +158,17 @@ export default {
       });
       input.click();
     };
+    const outExport = () => {
+      const exportFile = document.createElement("a");
+      exportFile.download = `BookSources${Date()
+        .replace(/.*?\s(\d+)\s(\d+)\s(\d+:\d+:\d+).*/, "$2$1$3")
+        .replace(/:/g, "")}.json`;
+      let myBlob = new Blob([JSON.stringify(store.state.bookSource, null, 4)], {
+        type: "application/json",
+      });
+      exportFile.href = window.URL.createObjectURL(myBlob);
+      exportFile.click();
+    };
     return {
       currentActive,
       deleteActiveSource,
@@ -168,6 +179,7 @@ export default {
       clearAllSources,
       bookSources,
       upFile,
+      outExport,
     };
   },
 };
