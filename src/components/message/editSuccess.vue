@@ -28,6 +28,7 @@ export default {
 
 <style scoped>
 .success {
+  z-index: 3;
   position: fixed;
   top: 100px;
   left: 50%;

@@ -134,6 +134,10 @@ export default {
             console.log(item);
           });
           data.delArr = [];
+          http("getBookSources").then((res) => {
+            bookSources.value = res.data;
+            console.log("同步完成！");
+          });
         } else {
           console.log("错误", res);
         }
