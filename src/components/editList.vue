@@ -8,7 +8,7 @@
     />
     <div>
       <div class="tool">
-        <button>导入书源文件</button>
+        <button @click="upFile">导入书源文件</button>
         <button>导出书源文件</button>
         <button @click="deleteActiveSource">删除选中源</button>
         <button @click="clearAllSources">清空列表</button>
@@ -143,6 +143,21 @@ export default {
         }
       });
     };
+    const upFile = () => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".json";
+      input.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        var reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = () => {
+          const jsonData = JSON.parse(reader.result);
+          store.commit("changeBookItemContent", jsonData);
+        };
+      });
+      input.click();
+    };
     return {
       currentActive,
       deleteActiveSource,
@@ -152,6 +167,7 @@ export default {
       sourcesList,
       clearAllSources,
       bookSources,
+      upFile,
     };
   },
 };
