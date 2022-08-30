@@ -26,3 +26,5 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+# 感谢
+本项目参考 [阅读3.0Web端](https://github.com/celetor/web-yuedu3)
