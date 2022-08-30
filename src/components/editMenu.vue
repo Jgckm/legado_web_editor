@@ -126,18 +126,21 @@ export default {
     const undo = () => {
       store.commit("editHistoryUndo");
     };
+
     const clearEdit = () => {
       store.commit("clearEdit");
       console.log("已清除");
       successText.value = "已清除";
       successShow.value = true;
     };
+
     const redo = () => {
       store.commit("clearEdit");
       store.commit("clearAllHistory");
       successText.value = "已清除所有历史记录";
       successShow.value = true;
     };
+
     const saveSource = () => {
       if (
         store.state.bookItemContent.bookSourceUrl !== "" &&
@@ -158,6 +161,7 @@ export default {
         warnShow.value = true;
       }
     };
+
     const debug = () => {
       isShow.value = true;
       store.commit("deBugMsgClear");
