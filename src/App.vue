@@ -6,14 +6,7 @@
 
 <script>
 export default {
-  setup() {
-    const handleClick = () => {
-      console.log(111);
-    };
-    return {
-      handleClick,
-    };
-  },
+  setup() {},
 };
 </script>
 
@@ -24,7 +17,7 @@ export default {
   height: 100vh;
 }
 .left {
-  width: 890px;
+  width: calc(50% - 55px);
   min-width: 500px;
   display: inline-block;
 }
