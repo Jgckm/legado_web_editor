@@ -5,6 +5,8 @@
       placeholder="输入后端地址 如：192.168.0.1:1122"
       v-model="url"
       @input="changInput(url)"
+      @keydown.enter="pullSource"
+      title="输入地址后 enter(回车键) 快捷拉取书源"
     />
     <ul>
       <li
@@ -78,10 +80,14 @@ export default {
     watchEffect(() => {
       data.current_tab = store.state.currentTab;
     });
+    const pullSource = () => {
+      document.querySelectorAll(".menu>button")[1].click();
+    };
     return {
       ...toRefs(data),
       handleSetActive,
       changInput,
+      pullSource,
     };
   },
 };

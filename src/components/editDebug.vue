@@ -5,6 +5,8 @@
     placeholder="输入搜索关键字，默认搜「我的」"
     v-model="searchKey"
     @input="changeSearch(searchKey)"
+    @keydown.enter="startSearch"
+    title="输入关键词 enter(回车键)快捷搜索"
   />
   <textarea
     placeholder="这里用于输出调试信息"
@@ -32,10 +34,14 @@ export default {
     watchEffect(() => {
       data.printDebug = store.state.deBugMsg;
     });
+    const startSearch = () => {
+      document.querySelectorAll(".menu>button")[6].click();
+    };
     return {
       ...toRefs(data),
       textareaDom,
       changeSearch,
+      startSearch,
     };
   },
 };
