@@ -32,7 +32,7 @@ textarea {
   border-radius: 4px;
   border: #ccc 1px solid;
   font-size: 16px;
-  font-family: "Microsoft YaHei UI", Arial, serif;
+  font-family: "Cascadia Code", "Microsoft YaHei UI", Arial, serif;
   line-height: 20px;
   padding: 10px 10px 10px;
 }
