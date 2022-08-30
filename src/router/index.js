@@ -11,7 +11,7 @@ import bookFind from "@/views/bookFind";
 
 const routes = [
   {
-    path: "/legado_web_editor",
+    path: "/",
     redirect: { name: "home" },
   },
   {

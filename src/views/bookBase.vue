@@ -29,7 +29,6 @@ export default {
       bookContent: store.state.bookItemContent,
     });
     const upData = (newContent) => {
-      // console.log(newContent);
       store.commit("changeBookItemNewContent", newContent);
     };
     watchEffect(() => {
