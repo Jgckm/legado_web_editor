@@ -1,7 +1,7 @@
 <template>
   <input
     type="text"
-    style="text-align: center"
+    style="text-align: center; border: 1px solid #dddddd; border-radius: 4px"
     placeholder="输入搜索关键字，默认搜「我的」"
     v-model="searchKey"
     @input="changeSearch(searchKey)"

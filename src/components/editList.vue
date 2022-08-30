@@ -1,6 +1,7 @@
 <template>
   <div style="display: flex; flex-flow: column">
     <input
+      class="search"
       type="text"
       placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
       v-model="searchKey"
@@ -13,7 +14,6 @@
         <button @click="deleteActiveSource">删除选中源</button>
         <button @click="clearAllSources">清空列表</button>
       </div>
-
       <div class="book_list">
         <div
           v-for="(data, index) in sourcesList(searchKey)"
@@ -43,11 +43,11 @@
 <script>
 import { reactive, ref, toRefs, watchEffect } from "vue";
 import store from "@/store";
+
 import { http } from "@/utils/http";
 
 export default {
   name: "editList",
-
   setup() {
     const bookSources = ref(store.state.bookSource);
     let data = reactive({
@@ -120,6 +120,10 @@ export default {
     });
 
     const deleteActiveSource = () => {
+      if (data.delArr.length === 0) {
+        console.log("没有选中的书源");
+        return false;
+      }
       const delSources = [];
       const source = sourcesList(data.searchKey);
       data.delArr.forEach((item) => {
@@ -186,6 +190,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search {
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
 input {
   text-align: center;
   font-size: 16px;
@@ -196,10 +204,17 @@ input {
 .tool {
   display: flex;
   justify-content: space-around;
-
+  padding: 4px 0;
   button {
+    border-radius: 4px;
+    padding: 5px;
+    outline: none;
+    border: none;
     flex: 1;
     margin: 0 2px;
+    &:hover {
+      background-color: #ddd;
+    }
   }
 }
 input[type="checkbox"] {

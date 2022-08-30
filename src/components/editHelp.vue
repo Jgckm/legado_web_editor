@@ -16,6 +16,9 @@
     <span><code>(?m)</code> 前缀表示逐行匹配</span><br />
     <span><code>(?i)</code> 前缀表示忽略大小写</span><br />
   </div>
+  <div class="author">
+    <a href="https://jgckm.github.io/" target="_blank">jgckm的博客</a>
+  </div>
 </template>
 
 <script>
@@ -40,5 +43,18 @@ code {
   font-family: "Cascadia Mono", "JetBrains Mono", "Microsoft YaHei UI", serif;
   background-color: #f3f4f4;
   border-radius: 4px;
+}
+.author {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  a {
+    padding: 5px 10px;
+    border-radius: 4px;
+    &:hover {
+      box-shadow: 0 0 3px 3px #cccccc;
+      background-color: #dddddd;
+    }
+  }
 }
 </style>
