@@ -27,6 +27,7 @@ export default {
   overflow-y: auto;
 }
 textarea {
+  min-height: 20px;
   flex: 1;
   outline: none;
   border-radius: 4px;
