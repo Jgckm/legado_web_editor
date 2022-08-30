@@ -2,6 +2,8 @@
 
 ![image-20220830140657685](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202208301406073.png)
 
+右上方填写 `ip` 地址即可食用
+
 ## Project setup
 ```
 npm install

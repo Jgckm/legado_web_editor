@@ -159,6 +159,7 @@ export default {
       }
     };
     const debug = () => {
+      isShow.value = true;
       store.commit("deBugMsgClear");
       store.commit("changeTabName", "editDebug");
       http("saveBookSources", store.state.bookItemContent).then((res) => {
@@ -187,6 +188,9 @@ export default {
           store.commit("changeDeBugMsg", msg.data);
         };
         socket.onclose = () => {
+          isShow.value = false;
+          successText.value = "调试已关闭！";
+          successShow.value = true;
           store.commit("changeDeBugMsg", "调试已关闭！");
         };
       });
