@@ -59,7 +59,7 @@ export default {
     const handleItemClick = (index) => {
       currentActive.value = index;
       store.commit("clearEdit");
-      store.commit("changeBookItemContent", bookSources.value[index]);
+      store.commit("changeBookItemContent", sourcesList(data.searchKey)[index]);
     };
     const clearAllSources = () => {
       store.commit("clearAllSource");

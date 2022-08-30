@@ -4,5 +4,6 @@ module.exports = defineConfig({
 });
 module.exports = {
   publicPath: process.env.NODE_ENV === "development" ? "./" : "././",
+  assetsDir: "static",
   outputDir: "dist",
 };
