@@ -11,6 +11,10 @@ export default {
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: "Cascadia";
+  src: url("@/assets/font/Cascadia-Code-Regular-2.ttf");
+}
 .editor {
   display: flex;
   align-items: stretch;
@@ -33,7 +37,7 @@ textarea {
   border-radius: 4px;
   border: #ccc 1px solid;
   font-size: 14px;
-  font-family: "Cascadia Code", "Microsoft YaHei UI", Arial, serif;
+  font-family: "Cascadia", "Microsoft YaHei UI", Arial, serif;
   line-height: 20px;
   padding: 10px 10px 10px;
 }

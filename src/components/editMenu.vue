@@ -14,14 +14,20 @@
         :text="successText"
       ></edit-success>
     </div>
-    <button @click="push">⇈推送源</button>
-    <button @click="pull">⇊拉取源</button>
-    <button @click="conver">⋙生成源</button>
-    <button @click="clearEdit">✗清空表单</button>
-    <button @click="undo">↶撤销操作</button>
-    <button @click="redo">↷重做操作</button>
-    <button @click="debug" title="Ctrl+Enter">⇏调试源</button>
-    <button @click="saveSource" title="Ctrl+S">✓保存源</button>
+    <button @click="push" title="Ctrl+P">⇈推送源 <span>Ctrl+P</span></button>
+    <button @click="pull" title="Shift+P">⇊拉取源 <span>Shift+P</span></button>
+    <button @click="conver" title="Ctrl+E">⋙生成源<span>Ctrl+E</span></button>
+    <button @click="clearEdit" title="Shift+C">
+      ✗清空表单<span>Shift+C</span>
+    </button>
+    <button @click="undo" title="Ctrl+Z">↶撤销操作<span>Ctrl+Z</span></button>
+    <button @click="redo" title="Shift+R">↷重做操作<span>Shift+R</span></button>
+    <button @click="debug" title="Ctrl+Enter">
+      ⇏调试源 <span>Ctrl+Enter</span>
+    </button>
+    <button @click="saveSource" title="Ctrl+S">
+      ✓保存源<span>Ctrl+S</span>
+    </button>
   </div>
 </template>
 
@@ -76,6 +82,8 @@ export default {
     };
 
     const push = () => {
+      successText.value = "正在推送中";
+      successShow.value = true;
       isShow.value = true;
       http("saveBookSources", store.state.bookSource)
         .then((json) => {
@@ -208,6 +216,23 @@ export default {
           saveSource();
           e.preventDefault();
         }
+        if (e.shiftKey && e.key === "R") {
+          redo();
+        }
+        if (e.shiftKey && e.key === "C") {
+          clearEdit();
+        }
+        if (e.ctrlKey && e.key === "e") {
+          conver();
+          e.preventDefault();
+        }
+        if (e.shiftKey && e.key === "P") {
+          pull();
+        }
+        if (e.ctrlKey && e.key === "p") {
+          push();
+          e.preventDefault();
+        }
       };
     });
 
@@ -251,10 +276,23 @@ button {
   box-sizing: border-box;
   border: #333333 solid 1px;
   background-color: transparent;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  span {
+    display: inline-block;
+    transform: translateY(20px);
+    opacity: 0;
+    font-size: 12px;
+    transition: all 0.3s ease;
+  }
 
   &:hover {
     color: #ffffff;
     background-color: gray;
+    span {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 }
 </style>
