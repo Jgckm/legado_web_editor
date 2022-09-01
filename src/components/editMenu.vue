@@ -20,14 +20,14 @@
     <button @click="clearEdit">✗清空表单</button>
     <button @click="undo">↶撤销操作</button>
     <button @click="redo">↷重做操作</button>
-    <button @click="debug">⇏调试源</button>
-    <button @click="saveSource">✓保存源</button>
+    <button @click="debug" title="Ctrl+Enter">⇏调试源</button>
+    <button @click="saveSource" title="Ctrl+S">✓保存源</button>
   </div>
 </template>
 
 <script>
 import { http } from "@/utils/http";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import store from "@/store";
 
 import editLoading from "@/components/message/editLoading";
@@ -199,6 +199,17 @@ export default {
         };
       });
     };
+    onMounted(() => {
+      document.onkeydown = (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+          debug();
+        }
+        if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+          saveSource();
+          e.preventDefault();
+        }
+      };
+    });
 
     return {
       debug,

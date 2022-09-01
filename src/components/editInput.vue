@@ -51,7 +51,6 @@ export default {
       });
     };
     const changeHistory = () => {
-      attr.value.style.height = "auto";
       if (!localStorage.getItem("history")) {
         localStorage.setItem("history", JSON.stringify({ new: [], old: [] }));
       }
