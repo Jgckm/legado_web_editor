@@ -1,6 +1,6 @@
 # legado_web_editor
 
-![image-20220830140657685](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202208301744631.png)
+![image-20220901202413040](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209012024417.png)
 
 右上方填写 `ip` 地址即可食用
 
