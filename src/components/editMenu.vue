@@ -119,7 +119,7 @@ export default {
           isShow.value = false;
         })
         .catch((err) => {
-          // console.log(err);
+          console.log(err);
           isShow.value = false;
           warnShow.value = true;
           warnText.value = `请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务`;
@@ -175,6 +175,7 @@ export default {
       store.commit("deBugMsgClear");
       store.commit("changeTabName", "editDebug");
       http("saveBookSources", store.state.bookItemContent).then((res) => {
+        console.log(res);
         const socket = new WebSocket(
           `ws://` +
             store.state.url.replace(/\d+$/, (port) => parseInt(port) + 1) +
