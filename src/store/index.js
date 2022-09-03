@@ -99,7 +99,6 @@ export default createStore({
     },
     clearEdit(state) {
       state.editTabSourceInfo = {};
-      clearBookItemContent(source_json);
       state.bookItemContent = { ...source_json };
       // console.log(source_json);
       // console.log(state.bookItemContent);
@@ -122,12 +121,3 @@ export default createStore({
   actions: {},
   modules: {},
 });
-function clearBookItemContent(obj) {
-  for (const objKey in obj) {
-    if (typeof obj[objKey] === "object") {
-      clearBookItemContent(obj[objKey]);
-    } else {
-      obj[objKey] = "";
-    }
-  }
-}

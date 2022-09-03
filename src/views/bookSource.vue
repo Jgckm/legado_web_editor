@@ -1,7 +1,7 @@
 <template>
   <div class="left">
     <div>
-      <!--      <div><a href="/">←主页</a><b>书源</b></div>-->
+      <div><a href="/">←主页</a><b>书源</b></div>
       <ul>
         <router-link
           :to="{ name: 'base' }"
