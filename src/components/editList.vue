@@ -223,6 +223,7 @@ input[type="checkbox"] {
   margin: 0 15px 0;
 }
 .book_item {
+  overflow: hidden;
   display: flex;
   align-items: center;
   margin-top: 10px;
@@ -236,16 +237,16 @@ input[type="checkbox"] {
 }
 
 .book_index {
-  width: 30px;
+  width: auto;
   height: 30px;
   text-align: center;
   line-height: 30px;
-  border-radius: 50%;
+  border-radius: 8px;
+  padding: 0 10px;
   background-color: lightpink;
 }
 
 .book_info {
-  width: 500px;
   display: flex;
   justify-content: space-between;
 }
