@@ -34,14 +34,17 @@
         帮助信息
       </li>
     </ul>
-    <div class="box" v-if="current_tab === 'editList'">
+    <!--    <div class="box" v-if="current_tab === 'editList'">-->
+    <!--      <component :is="current_tab"></component>-->
+    <!--    </div>-->
+    <!--    <div class="box" v-else>-->
+    <!--      <keep-alive>-->
+    <!--        <component :is="current_tab"></component>-->
+    <!--      </keep-alive>-->
+    <!--    </div>-->
+    <keep-alive>
       <component :is="current_tab"></component>
-    </div>
-    <div class="box" v-else>
-      <keep-alive>
-        <component :is="current_tab"></component>
-      </keep-alive>
-    </div>
+    </keep-alive>
   </div>
 </template>
 
