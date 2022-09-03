@@ -6,6 +6,7 @@
       placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
       v-model="searchKey"
       @input="sourcesList(searchKey)"
+      @focus="delArr = []"
     />
     <div>
       <div class="tool">

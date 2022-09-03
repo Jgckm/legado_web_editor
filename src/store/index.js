@@ -10,15 +10,9 @@ export default createStore({
     editTabSourceInfo: {},
     deBugMsg: "",
     searchKey: "",
-    deleteSources: [],
   },
   getters: {},
   mutations: {
-    delBookSources(state) {
-      const delArr = state.deleteSources;
-      console.log("删除的列表", delArr);
-      delArr.forEach((item) => state.bookSource.splice(item - 1, 1));
-    },
     changeSearchKey(state, key) {
       state.searchKey = key;
     },

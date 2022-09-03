@@ -1,13 +1,13 @@
 <template>
   <div class="out">
-    <!--    <input-->
-    <!--      type="text"-->
-    <!--      placeholder="输入后端地址 如：192.168.0.1:1122"-->
-    <!--      v-model="url"-->
-    <!--      @input="changInput(url)"-->
-    <!--      @keydown.enter="pullSource"-->
-    <!--      title="输入地址后 enter(回车键) 快捷拉取书源"-->
-    <!--    />-->
+    <input
+      type="text"
+      placeholder="输入后端地址 如：192.168.0.1:1122"
+      v-model="url"
+      @input="changInput(url)"
+      @keydown.enter="pullSource"
+      title="输入地址后 enter(回车键) 快捷拉取书源"
+    />
     <ul>
       <li
         :class="current_tab === 'editTab' ? 'active' : ''"
