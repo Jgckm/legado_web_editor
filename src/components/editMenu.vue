@@ -174,11 +174,21 @@ export default {
       store.commit("changeTabName", "editDebug");
       http("saveBookSources", store.state.bookItemContent).then((res) => {
         console.log(res);
-        const socket = new WebSocket(
-          `ws://` +
-            store.state.url.replace(/\d+$/, (port) => parseInt(port) + 1) +
-            `/bookSourceDebug`
-        );
+        let wsUrl;
+
+        if (localStorage.getItem("url") === null) {
+          wsUrl =
+            location.host.replace(/\d+$/, (port) => parseInt(port) + 1) +
+            `/bookSourceDebug`;
+        } else {
+          let url = localStorage.getItem("url");
+          wsUrl =
+            url.replace(/\d+$/, (port) => parseInt(port) + 1) +
+            `/bookSourceDebug`;
+        }
+        console.log(wsUrl);
+
+        const socket = new WebSocket(`ws://` + wsUrl);
         let sKey;
         if (store.state.bookItemContent.ruleSearch.checkKeyWord) {
           sKey = store.state.bookItemContent.ruleSearch.checkKeyWord;

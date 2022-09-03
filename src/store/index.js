@@ -3,7 +3,7 @@ import source_json from "@/utils/bookSource.json";
 
 export default createStore({
   state: {
-    url: localStorage.getItem("url") || "",
+    // url: localStorage.getItem("url") || "",
     bookSource: [], // 临时存放所有书源
     bookItemContent: source_json, // 当前点击的书源项
     currentTab: localStorage.getItem("tabName") || "editTab",

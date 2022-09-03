@@ -6,7 +6,7 @@
  */
 function http(type, data) {
   let formatUrl;
-  if (!localStorage.getItem("url")) {
+  if (localStorage.getItem("url") === null) {
     formatUrl = "http://" + location.host + "/" + type;
   } else {
     formatUrl = "http://" + localStorage.getItem("url") + "/" + type;
