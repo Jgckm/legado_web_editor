@@ -2,7 +2,11 @@
 
 ![image-20220901202413040](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209012024417.png)
 
-右上方填写 `ip` 地址即可食用
+- 完美的支持原来的 web 编辑功能
+- 调整页面布局
+- 支持点击文本域自适应高度
+- 加入快捷键
+- 删除多个书源
 
 # 快捷键说明
 | 操作               | 说明     |
@@ -17,7 +21,26 @@
 | `Shift`+`R`        | 重做操作 |
 | `Ctrl`+`Enter`     | 调试源   |
 
+每菜单个操作都有`快捷键`提示
+
+![快捷键提示](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031224684.gif)
+
+# 高度自适应
+
+点击后文本框`高度自动适应`
+
+![高度自适应](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031628041.gif)
+
+# 删除书源
+
+使用快捷键快速拉取源 
+
+`多选删除`
+
+![删除书源](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031249415.gif)
+
 ## Project setup
+
 ```
 npm install
 ```
