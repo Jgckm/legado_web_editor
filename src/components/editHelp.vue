@@ -8,7 +8,7 @@
   >
   <a href="https://www.w3cschool.cn/regex_rmjc" target="_blank"
     >正则表达式教程</a
-  ><a href="https://regexr.com/" target="_blank">正则表达式在线验证工具</a>
+  ><a href="https://regexr-cn.com/" target="_blank">正则表达式在线验证工具</a>
   <div style="margin-top: 20px">
     <span><code>^$()[]{}.?+*|</code> 这些是Java正则特殊符号,匹配需转义</span
     ><br />
