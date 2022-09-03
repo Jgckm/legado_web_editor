@@ -5,7 +5,13 @@
  * @returns {Promise<any>}
  */
 function http(type, data) {
-  const formatUrl = `http://${localStorage.getItem("url") || ""}/${type}`;
+  let formatUrl;
+  if (!localStorage.getItem("url")) {
+    formatUrl = "http://" + location.host + "/" + type;
+  } else {
+    formatUrl = "http://" + localStorage.getItem("url") + "/" + type;
+  }
+  console.log(formatUrl);
   switch (type) {
     case "getBookSources":
       return Get(formatUrl);

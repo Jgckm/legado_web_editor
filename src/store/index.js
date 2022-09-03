@@ -16,10 +16,7 @@ export default createStore({
     changeSearchKey(state, key) {
       state.searchKey = key;
     },
-    changeUrl(state, url) {
-      state.url = url;
-      localStorage.setItem("url", url);
-    },
+
     changeSource(state, data) {
       state.bookSource = data;
     },

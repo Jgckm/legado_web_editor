@@ -66,7 +66,6 @@ export default {
         .then((res) => {
           store.commit("changeTabName", "editList");
           store.commit("changeSource", res.data);
-          localStorage.setItem("url", store.state.url);
           isShow.value = false;
           successText.value = `成功拉取${res.data.length}条源`;
           successShow.value = true;
@@ -77,7 +76,6 @@ export default {
           warnText.value =
             " 请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务";
           warnShow.value = true;
-          store.commit("changeUrl", "");
         });
     };
 
