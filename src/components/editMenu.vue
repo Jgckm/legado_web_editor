@@ -61,7 +61,6 @@ export default {
 
     const pull = () => {
       isShow.value = true;
-      console.log(store.state.url);
       http("getBookSources")
         .then((res) => {
           store.commit("changeTabName", "editList");
