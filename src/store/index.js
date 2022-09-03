@@ -23,6 +23,9 @@ export default createStore({
     changeSource(state, data) {
       state.bookSource = data;
     },
+    changeBookSource(state, data) {
+      state.bookSource = data;
+    },
     // editList Click
     changeBookItemContent(state, content) {
       const newContent = JSON.stringify(content);

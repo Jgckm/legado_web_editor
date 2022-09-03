@@ -158,7 +158,7 @@ export default {
         reader.readAsText(file);
         reader.onload = () => {
           const jsonData = JSON.parse(reader.result);
-          store.commit("changeBookItemContent", jsonData);
+          store.commit("changeBookSource", jsonData);
         };
       });
       input.click();
