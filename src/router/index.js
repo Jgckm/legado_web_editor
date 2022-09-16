@@ -8,6 +8,7 @@ import bookContent from "@/views/bookContent";
 import bookDetail from "@/views/bookDetail";
 import bookOther from "@/views/bookOther";
 import bookFind from "@/views/bookFind";
+import bookReview from "@/views/bookReview";
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
         path: "/bookSource/content",
         name: "content",
         component: bookContent,
+      },
+      {
+        path: "/bookSource/review",
+        name: "review",
+        component: bookReview,
       },
       {
         path: "/bookSource/other",

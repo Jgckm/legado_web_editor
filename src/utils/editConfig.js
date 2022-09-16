@@ -31,6 +31,12 @@ export default {
       hint: "<选填>描述源作者和状态",
     },
     {
+      title: "书源变量说明",
+      rows: 1,
+      id: "variableComment",
+      hint: "<选填>书源变量说明",
+    },
+    {
       title: "登录地址",
       rows: 1,
       id: "loginUrl",
@@ -252,8 +258,26 @@ export default {
       id: "ruleBookInfo_tocUrl",
       hint: "选择书籍详情页网址 (规则结果为String类型的url, 与详情页相同时可省略)",
     },
+    {
+      title: "下载URL",
+      rows: 1,
+      id: "ruleBookInfo_downloadUrls",
+      hint: "文件类书源下载地址 (规则结果为String类型的url, 多个链接返回数组)",
+    },
+    {
+      title: "允许修改书名作者",
+      rows: 1,
+      id: "ruleBookInfo_canReName",
+      hint: "允许修改书名作者(规则结果为String类型, 默认不允许)",
+    },
   ],
   directory: [
+    {
+      title: "更新前JS",
+      rows: 3,
+      id: "ruleToc_preUpdateJs",
+      hint: "动态更新书籍目录链接",
+    },
     {
       title: "列表规则",
       rows: 3,
@@ -344,7 +368,75 @@ export default {
       title: "购买操作",
       rows: 1,
       id: "ruleContent_payAction",
-      hint: "购买章节 返回链接或js",
+      hint: "填写JavaScript 返回购买链接或者调用购买接口",
+    },
+    {
+      title: "图片解密",
+      rows: 1,
+      id: "ruleContent_imageDecode",
+      hint: "填写JavaScript 返回解密图片的bytes ",
+    },
+  ],
+  review: [
+    {
+      title: "段评URL",
+      rows: 1,
+      id: "ruleReview_reviewUrl",
+      hint: "段评URL",
+    },
+    {
+      title: "段评发布者头像",
+      rows: 1,
+      id: "ruleReview_avatarRule",
+      hint: "段评发布者头像",
+    },
+    {
+      title: "段评内容",
+      rows: 1,
+      id: "ruleReview_contentRule",
+      hint: "段评内容",
+    },
+    {
+      title: "段评发布时间",
+      rows: 1,
+      id: "ruleReview_postTimeRule",
+      hint: "段评发布时间",
+    },
+    {
+      title: "获取段评回复URL",
+      rows: 1,
+      id: "ruleReview_reviewQuoteUrl",
+      hint: "获取段评回复URL",
+    },
+    {
+      title: "点赞URL",
+      rows: 1,
+      id: "ruleReview_voteUpUrl",
+      hint: "点赞URL",
+    },
+    {
+      title: "点踩URL",
+      rows: 1,
+      id: "ruleReview_voteDownUrl",
+      hint: "点踩URL",
+    },
+    {
+      title: "发送回复URL",
+      rows: 1,
+      id: "ruleReview_postReviewUrl",
+      hint: "发送回复URL",
+    },
+    {
+      title: "发送回复段评URL",
+      rows: 1,
+      id: "ruleReview_postQuoteUrl",
+      hint: "发送回复段评URL",
+    },
+    {
+      title: "删除段评URL",
+      rows: 1,
+      id: "ruleReview_deleteUrl",
+      hint: "删除段评URL",
     },
   ],
   other: [
@@ -359,6 +451,18 @@ export default {
       rows: 1,
       id: "enabledExplore",
       hint: "启用: true  关闭: false (可选,默认true)",
+    },
+    {
+      title: "启用段评",
+      rows: 1,
+      id: "enabledReview",
+      hint: "启用: true  关闭: false (可选,默认false)",
+    },
+    {
+      title: "启用CookieJar",
+      rows: 1,
+      id: "enabledExplore",
+      hint: "启用: true  关闭: false (可选,默认false)",
     },
     {
       title: "搜索权重",

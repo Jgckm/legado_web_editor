@@ -60,6 +60,15 @@
         <router-link
           custom
           v-slot="{ navigate, isActive }"
+          :to="{ name: 'review' }"
+        >
+          <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
+            段评
+          </li>
+        </router-link>
+        <router-link
+          custom
+          v-slot="{ navigate, isActive }"
           :to="{ name: 'other' }"
         >
           <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">

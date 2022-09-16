@@ -14,9 +14,12 @@
     "exploreUrl": "",
     "enabled": true,
     "enabledExplore": true,
+    "enabledReview": false,
+    "enabledCookieJar": false,
     "weight": null,
     "customOrder": null,
     "lastUpdateTime": 0,
+    "variableComment": null,
     "ruleSearch": {
         "checkKeyWord": "",
         "bookList": "",
@@ -49,9 +52,12 @@
         "lastChapter": "",
         "intro": "",
         "coverUrl": "",
-        "tocUrl": ""
+        "tocUrl": "",
+        "downloadUrls": "",
+        "canReName": ""
     },
     "ruleToc": {
+        "preUpdateJs": "",
         "chapterList": "",
         "chapterName": "",
         "chapterUrl": "",
@@ -68,6 +74,19 @@
         "sourceRegex": "",
         "replaceRegex": "",
         "imageStyle": "",
-        "payAction": ""
+        "payAction": "",
+        "imageDecode": ""
+    },
+    "ruleReview": {
+        "reviewUrl": null,
+        "avatarRule": null,
+        "contentRule": null,
+        "postTimeRule": null,
+        "reviewQuoteUrl": null,
+        "voteUpUrl": null,
+        "voteDownUrl": null,
+        "postReviewUrl": null,
+        "postQuoteUrl": null,
+        "deleteUrl": null
     }
 }
