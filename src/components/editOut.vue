@@ -73,7 +73,6 @@ export default {
 
     const handleSetActive = (tabName) => {
       store.commit("changeTabName", tabName);
-      localStorage.setItem("tabName", tabName);
     };
 
     const changInput = (url) => {

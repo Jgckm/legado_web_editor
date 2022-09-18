@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { http } from "@/utils/http";
+import * as api from "@/utils/api";
 import { onMounted, ref } from "vue";
 import store from "@/store";
 
@@ -61,10 +61,10 @@ export default {
 
     const pull = () => {
       isShow.value = true;
-      http("getBookSources")
+      api.pullSources()
         .then((res) => {
           store.commit("changeTabName", "editList");
-          store.commit("changeSource", res.data);
+          store.commit("saveSource", res.data);
           isShow.value = false;
           successText.value = `成功拉取${res.data.length}条源`;
           successShow.value = true;
@@ -82,14 +82,15 @@ export default {
       successText.value = "正在推送中";
       successShow.value = true;
       isShow.value = true;
-      http("saveBookSources", store.state.bookSource)
+      let sources = /bookSource/.test(location.href) ? store.state.bookSources : store.state.rssSources;
+      api.pushSources(sources)
         .then((json) => {
           if (json.isSuccess) {
             let okData = json.data;
             if (Array.isArray(okData)) {
               let failMsg = ``;
-              if (store.state.bookSource.length > okData.length) {
-                store.state.bookSource.forEach((item) => {
+              if (sources.length > okData.length) {
+                sources.forEach((item) => {
                   if (
                     !okData.find((x) => x.bookSourceUrl === item.bookSourceUrl)
                   ) {
@@ -99,13 +100,13 @@ export default {
                 failMsg = "\n推送失败的源将用红色字体标注!";
               }
               successText.value = `批量推送源到「阅读3.0APP」\n共计: ${
-                store.state.bookSource.length
+                sources.length
               } 条\n成功: ${okData.length} 条\n失败: ${
-                store.state.bookSource.length - okData.length
+                sources.length - okData.length
               } 条${failMsg}`;
               successShow.value = true;
             } else {
-              successText.value = `批量推送源到「阅读3.0APP」成功!\n共计: ${store.state.bookSource.length} 条`;
+              successText.value = `批量推送源到「阅读3.0APP」成功!\n共计: ${sources.length} 条`;
               successShow.value = true;
             }
           } else {
@@ -147,71 +148,68 @@ export default {
     };
 
     const saveSource = () => {
+      let isBookSource = /bookSource/.test(location.href),
+        source = store.state.currentSource;
       if (
-        store.state.bookItemContent.bookSourceUrl !== "" &&
-        store.state.bookItemContent.bookSourceType !== "" &&
-        store.state.bookItemContent.bookSourceName !== ""
+        isBookSource &&
+        source.bookSourceUrl !== "" &&
+        source.bookSourceType !== "" &&
+        source.bookSourceName !== "" ||
+        !isBookSource && source.sourceUrl !== "" &&
+        source.sourceName !== ""
       ) {
-        http("saveBookSources", store.state.bookItemContent).then((res) => {
+        api.pushSource(source).then((res) => {
           if (res.isSuccess) {
-            successText.value = `源《${store.state.bookItemContent.bookSourceName}》已成功保存到「阅读3.0APP」`;
+            successText.value = `源《${isBookSource ? source.bookSourceName: source.sourceName}》已成功保存到「阅读3.0APP」`;
             successShow.value = true;
           } else {
-            warnText.value = `源《${store.state.bookItemContent.bookSourceName}》保存失败!\nErrorMsg: ${res.errorMsg}`;
+            warnText.value = `源《${isBookSource ? source.bookSourceName : source.sourceName}》保存失败!\nErrorMsg: ${res.errorMsg}`;
             warnShow.value = true;
           }
         });
       } else {
-        warnText.value = `请检查你的 源域名 源名称 源类型 <必填>项是否全部填写`;
+        warnText.value = `请检查<必填>项是否全部填写`;
         warnShow.value = true;
       }
     };
 
     const debug = () => {
       isShow.value = true;
-      store.commit("deBugMsgClear");
+      store.commit("clearDeBugMsg");
       store.commit("changeTabName", "editDebug");
-      http("saveBookSources", store.state.bookItemContent).then((res) => {
+      let isBookSource = /bookSource/.test(location.href),
+      source = store.state.currentSource;
+      api.pushSource(source).then((res) => {
         console.log(res);
-        let wsUrl;
-
-        if (localStorage.getItem("url") === null) {
-          wsUrl =
-            location.host.replace(/\d+$/, (port) => parseInt(port) + 1) +
-            `/bookSourceDebug`;
-        } else {
-          let url = localStorage.getItem("url");
-          wsUrl =
-            url.replace(/\d+$/, (port) => parseInt(port) + 1) +
-            `/bookSourceDebug`;
-        }
+        let wsUrl = "ws://" + (localStorage.getItem("url") || location.host).replace(/\d+$/, (port) => parseInt(port) + 1) + "/" +
+          isBookSource ? "bookSourceDebug" : "rssSourceDebug";
         console.log(wsUrl);
 
-        const socket = new WebSocket(`ws://` + wsUrl);
-        let sKey;
-        if (store.state.bookItemContent.ruleSearch.checkKeyWord) {
-          sKey = store.state.bookItemContent.ruleSearch.checkKeyWord;
-          console.log(sKey, "-------- bookItemContent");
-        } else if (store.state.searchKey) {
-          sKey = store.state.searchKey;
-          console.log(sKey, "----------- searchKey");
-        } else {
-          sKey = "我的";
-          console.log(sKey, "-------------- sKey");
+        const socket = new WebSocket(wsUrl);
+        let key = "", tag = isBookSource ? source.bookSourceUrl : source.sourceUrl;
+        if (isBookSource) {
+          if (source.ruleSearch.checkKeyWord) {
+            key = source.ruleSearch.checkKeyWord;
+          } else if (store.state.searchKey) {
+            key = store.state.searchKey;
+          } else {
+            key = "我的";
+          }
         }
+
         socket.onopen = () => {
           socket.send(
-            `{"tag":"${store.state.bookItemContent.bookSourceUrl}", "key":"${sKey}"}`
+            `{"tag":"${tag}", "key":"${key}"}`
           );
         };
         socket.onmessage = (msg) => {
-          store.commit("changeDeBugMsg", msg.data);
+          store.commit("appendDeBugMsg", msg.data);
         };
         socket.onclose = () => {
           isShow.value = false;
           successText.value = "调试已关闭！";
           successShow.value = true;
-          store.commit("changeDeBugMsg", "调试已关闭！");
+          store.commit("appendDeBugMsg", "调试已关闭！");
         };
       });
     };

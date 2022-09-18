@@ -3,11 +3,10 @@ import store from "@/store";
 
 export default function () {
   const data = reactive({
-    bookContent: store.state.bookItemContent,
+    bookContent: store.state.currentSource
   });
-  const upData = (newContent) => {
-    // console.log(newContent);
-    store.commit("changeBookItemNewContent", newContent);
+  const upData = (data) => {
+    store.commit("changeCurrentSourceValue", data);
   };
   const setContent = (elId) => {
     try {
@@ -25,7 +24,7 @@ export default function () {
   };
 
   watchEffect(() => {
-    data.bookContent = store.state.bookItemContent;
+    data.bookContent = store.state.currentSource;
   });
   return {
     ...toRefs(data),

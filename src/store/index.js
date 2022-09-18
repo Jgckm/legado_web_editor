@@ -1,13 +1,13 @@
 import { createStore } from "vuex";
-import source_json from "@/utils/bookSource.json";
 
 export default createStore({
   state: {
     url: localStorage.getItem("url") || "",
-    bookSource: [], // 临时存放所有书源
-    bookItemContent: source_json, // 当前点击的书源项
+    bookSources: [], // 临时存放所有书源,
+    rssSources: [],   // 临时存放所有订阅源
+    currentSource: {}, // 当前编辑的源
     currentTab: localStorage.getItem("tabName") || "editTab",
-    editTabSourceInfo: {},
+    editTabSourceInfo: {},  // 生成序列化的json数据
     deBugMsg: "",
     searchKey: "",
   },
@@ -17,49 +17,42 @@ export default createStore({
       state.searchKey = key;
     },
 
-    changeSource(state, data) {
-      state.bookSource = data;
-    },
-    changeBookSource(state, data) {
-      state.bookSource = data;
-    },
-    // editList Click
-    changeBookItemContent(state, content) {
-      const newContent = JSON.stringify(content);
-      state.bookItemContent = JSON.parse(newContent);
-      // console.log(content);
-    },
-    // edit Content
-    changeBookItemNewContent(state, newContent) {
-      if (newContent.type.includes("_")) {
-        let rule1 = newContent.type.split("_")[0];
-        let rule2 = newContent.type.split("_")[1];
-        state.bookItemContent[rule1][rule2] = newContent.value;
-        // console.log(rule1, rule2, state.bookItemContent);
-        // console.log(newContent);
+    //拉取源后保存
+    saveSources(state, data) {
+      if (/bookSource/.test(location.href)) {
+        state.bookSources = data;
       } else {
-        state.bookItemContent[newContent.type] = newContent.value;
-        // edit last time
-        state.bookItemContent.lastUpdateTime = new Date().getTime();
+        state.rssSources = data;
       }
-      // console.log(state.bookItemContent);
+    },
+    // 更改当前编辑的源
+    changeCurrentSource(state, source) {
+      const newContent = JSON.stringify(source);
+      state.currentSource = JSON.parse(newContent);
+    },
+    // 修改当前源的某一个值
+    changeCurrentSourceValue(state, data) {
+      if (data.type.includes("_")) {
+        let rule1 = data.type.split("_")[0],
+          rule2 = data.type.split("_")[1],
+          value = {};
+        value[rule2] = data.value;
+        //state.currentSource[rule1] is Object, use `Object.assign` to override value
+        state.currentSource[rule1] = Object.assign(state.currentSource[rule1] || {}, value)
+      } else {
+        state.currentSource[data.type] = data.value;
+      }
+      // edit last time
+      state.currentSource.lastUpdateTime = new Date().getTime();
     },
     // update editTab tabName and editTab info
     changeTabName(state, tabName) {
       state.currentTab = tabName;
       localStorage.setItem("tabName", tabName);
-
       console.log(tabName);
     },
     changeEidtTabSourceInfo(state) {
-      // edit last time
-      for (const sourceJsonKey in source_json) {
-        state.editTabSourceInfo[sourceJsonKey] = source_json[sourceJsonKey];
-      }
-      for (const bookItemContentKey in state.bookItemContent) {
-        state.editTabSourceInfo[bookItemContentKey] =
-          state.bookItemContent[bookItemContentKey];
-      }
+      state.editTabSourceInfo = state.currentSource;
     },
     editHistory(state, history) {
       let historyObj;
@@ -81,9 +74,9 @@ export default createStore({
     editHistoryUndo(state) {
       if (localStorage.getItem("history")) {
         let historyObj = JSON.parse(localStorage.getItem("history"));
-        historyObj.old.push(state.bookItemContent);
+        historyObj.old.push(state.currentSource);
         if (historyObj.new.length) {
-          state.bookItemContent = historyObj.new.pop();
+          state.currentSource = historyObj.new.pop();
         }
         localStorage.setItem("history", JSON.stringify(historyObj));
       }
@@ -93,23 +86,21 @@ export default createStore({
     },
     clearEdit(state) {
       state.editTabSourceInfo = {};
-      state.bookItemContent = { ...source_json };
-      // console.log(source_json);
-      // console.log(state.bookItemContent);
+      state.currentSource = {};
     },
-    changeDeBugMsg(state, msg) {
+    appendDeBugMsg(state, msg) {
       let el = document.querySelector("#debug_text");
       el.scrollTop = el.scrollHeight;
-      state.deBugMsg = state.deBugMsg + msg + "\n";
+      state.deBugMsg += msg + "\n";
     },
-    deBugMsgClear(state) {
+    clearDeBugMsg(state) {
       state.deBugMsg = "";
     },
 
     // clear all source
     clearAllSource(state) {
-      state.bookSource = [];
-      console.log("clear all source ");
+      state.bookSources = [];
+      state.rssSources = [];
     },
   },
   actions: {},

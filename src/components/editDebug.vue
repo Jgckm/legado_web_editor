@@ -7,6 +7,7 @@
     @input="changeSearch(searchKey)"
     @keydown.enter="startSearch"
     title="输入关键词 enter(回车键)快捷搜索"
+    v-if="/bookSource/.test(location.href)"
   />
   <textarea
     placeholder="这里用于输出调试信息"
