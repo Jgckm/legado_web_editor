@@ -5,7 +5,6 @@
       type="text"
       placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
       v-model="searchKey"
-      @input="filterSource(searchKey)"
       @focus="delArr = []"
     />
     <div>
@@ -17,7 +16,7 @@
       </div>
       <div class="source_list">
         <div
-          v-for="(data, index) in filterSource(searchKey)"
+          v-for="(data, index) in filtedSources"
           :key="data.bookSourceUrl || data.sourceUrl"
           class="book_item"
           v-bind:class="index === currentActive ? 'book_active' : ''"
@@ -30,7 +29,7 @@
           >
             <div class="book_info">
               <span>{{ data.bookSourceName || data.sourceName }}</span>
-              <span>最后修改：{{ formatTime(data.lastUpdateTime) || "未知" }}</span>
+              <span v-if="isBookSource">最后修改：{{ formatTime(data.lastUpdateTime)}}</span>
               <span>分组：{{ data.bookSourceGroup || data.sourceGroup || "无分组" }}</span>
             </div>
             <div>{{ data.bookSourceUrl || data.sourceUrl }}</div>
@@ -42,7 +41,7 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs, watchEffect } from "vue";
+import { reactive, ref, toRefs, watchEffect, computed } from "vue";
 import store from "@/store";
 import * as api from "@/utils/api";
 
@@ -52,14 +51,15 @@ export default {
     let data = reactive({
       searchKey: "",
       delArr: [],
-      sources: []
+      sources: [],
+      filtedSources: []
     });
 
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
       store.commit("clearEdit");
-      store.commit("changeCurrentSource", data.sources[index]);
+      store.commit("changeCurrentSource", data.filtedSources[index]);
     };
     const clearAllSources = () => {
       store.commit("clearAllSource");
@@ -98,44 +98,51 @@ export default {
         seconds
       );
     };
-    const filterSource = (key) => {
+    //筛选源
+    const filterSource = (sources, key) => {
       if (key === "") return data.sources;
       let isBookSource = /bookSource/.test(location.href);
       if (isBookSource) {
-        return data.sources.filter((item) =>
+        return sources.filter((item) =>
           item.bookSourceName.toUpperCase().includes(key.toUpperCase()) ||
           (item.bookSourceGroup || "").toUpperCase().includes(key.toUpperCase()) ||
           item.bookSourceUrl.toUpperCase().includes(key.toUpperCase())
         );
       } else {
-        return data.sources.filter((item) =>
+        return sources.filter((item) =>
           item.sourceName.toUpperCase().includes(key.toUpperCase()) ||
           (item.sourceGroup || "").toUpperCase().includes(key.toUpperCase()) ||
           item.sourceUrl.toUpperCase().includes(key.toUpperCase())
         );
       }
     };
-  watchEffect(() => {
-    const isBookSource = /bookSource/.test(location.href);
-    const sources = isBookSource ? store.state.bookSources : store.state.rssSources;
-    data.sources = sources;
-  });
+
+    watchEffect(() => {
+      const isBookSource = /bookSource/.test(location.href);
+      const sources = isBookSource ? store.state.bookSources : store.state.rssSources;
+      data.sources = sources;
+    });
+    watchEffect(() => {
+      data.filtedSources = filterSource(data.sources, data.searchKey);
+    });
+    const isBookSource = computed(() => {
+      return /bookSource/.test(window.location.href)
+    });
     const deleteActiveSource = () => {
       if (data.delArr.length === 0) {
         console.log("没有选中的书源");
         return false;
       }
       const delSources = [];
-      const source = filterSource(data.searchKey);
-      data.delArr.forEach((item) => {
-        delSources.push(source[item]);
+      data.delArr.forEach((index) => {
+        delSources.push(data.filtedSources[index]);
       });
       api.deleteSources(delSources).then((res) => {
         if (res.isSuccess) {
           console.log("删除成功");
-          data.delArr.forEach((item) => {
-            source.splice(item, 1);
-            console.log(item);
+          data.delArr.forEach((index) => {
+            let deletedSource = data.filtedSources.splice(index, 1);
+            data.sources = data.sources.filter((source) => source !== deletedSource);
           });
           data.delArr = [];
         } else {
@@ -176,9 +183,9 @@ export default {
     };
     return {
       currentActive,
+      isBookSource,
       deleteActiveSource,
       handleItemClick,
-      filterSource,
       ...toRefs(data),
       formatTime,
       clearAllSources,
