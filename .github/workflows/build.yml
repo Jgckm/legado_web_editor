@@ -25,7 +25,6 @@ jobs:
           npm install
 
       - name: Format code
-        if: ${{ github.actor == 'gedoor' }}
         run: |
           npm run-script lint
 

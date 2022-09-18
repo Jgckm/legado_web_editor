@@ -49,6 +49,7 @@ jobs:
       - name: Build Master
         run: |
           npm install
+          npm run-script lint
           npm run-script build
           zip -q -r dist.zip ./dist
 
