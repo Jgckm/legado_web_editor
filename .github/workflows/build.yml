@@ -52,8 +52,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git clone "https://${{ github.actor }}:${{ secrets.ACTIONS_TOKEN }}@github.com/${{ github.actor }}/legado" --depth 1
-          rm -rf legado/app/src/main/assets/web/bookSource/*
-          rm -rf legado/app/src/main/assets/web/rssSource/*
+          rm -rf legado/app/src/main/assets/web/bookSource
+          rm -rf legado/app/src/main/assets/web/rssSource
+          rm -rf legado/app/src/main/assets/web/source
           mkdir legado/app/src/main/assets/web/source
           mv -f $GITHUB_WORKSPACE/dist/* legado/app/src/main/assets/web/source/
           cd legado
