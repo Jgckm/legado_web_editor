@@ -15,7 +15,7 @@ jobs:
         run: |
           version="v$(date -d "8 hour" -u +3.%y.%m%d%H)"
           echo "APP_VER=$version" >> $GITHUB_ENV
-          tag_name=$(curl -s "https://api.github.com/repos/${{ github.actor }}/legado_web_bookSource_editor/releases/latest" | jq .tag_name -r)
+          tag_name=$(curl -s "https://api.github.com/repos/${{ github.actor }}/legado_web_source_editor/releases/latest" | jq .tag_name -r)
           echo "TAG_NAME=$tag_name" >> $GITHUB_ENV
 
       - name: Create Release
