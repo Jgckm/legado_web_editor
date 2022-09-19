@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div>
-      <edit-loading v-if="isShow"></edit-loading>
+      <edit-loading v-if="showLoading"></edit-loading>
       <edit-warn
         :text="warnText"
         :is-show="warnShow"
@@ -43,7 +43,7 @@ import editSuccess from "@/components/message/editSuccess";
 export default {
   components: { editLoading, editWarn, editSuccess },
   setup() {
-    const isShow = ref(false); // loading
+    const showLoading = ref(false); // loading
     const warnShow = ref(false); // warn
     const successText = ref(""); // successText
     const successShow = ref(false); // success
@@ -60,19 +60,24 @@ export default {
     };
 
     const pull = () => {
-      isShow.value = true;
+      showLoading.value = true;
       api
         .pullSources()
         .then((res) => {
-          store.commit("changeTabName", "editList");
-          store.commit("saveSources", res.data);
-          isShow.value = false;
-          successText.value = `成功拉取${res.data.length}条源`;
-          successShow.value = true;
+          showLoading.value = false;
+          if (res.isSuccess) {
+            store.commit("changeTabName", "editList");
+            store.commit("saveSources", res.data);
+            successText.value = `成功拉取${res.data.length}条源`;
+            successShow.value = true;
+          } else {
+            warnText.value = res.errorMsg;
+            warnShow.value = true;
+          }
         })
         .catch((err) => {
           console.log(err);
-          isShow.value = false;
+          showLoading.value = false;
           warnText.value =
             " 请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务";
           warnShow.value = true;
@@ -82,7 +87,7 @@ export default {
     const push = () => {
       successText.value = "正在推送中";
       successShow.value = true;
-      isShow.value = true;
+      showLoading.value = true;
       let sources = /bookSource/.test(location.href)
         ? store.state.bookSources
         : store.state.rssSources;
@@ -118,11 +123,11 @@ export default {
             warnText.value = `批量推送源失败!\nErrorMsg: ${json.errorMsg}`;
             warnShow.value = true;
           }
-          isShow.value = false;
+          showLoading.value = false;
         })
         .catch((err) => {
           console.log(err);
-          isShow.value = false;
+          showLoading.value = false;
           warnShow.value = true;
           warnText.value = `请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务`;
         });
@@ -181,7 +186,7 @@ export default {
     };
 
     const debug = () => {
-      isShow.value = true;
+      showLoading.value = true;
       store.commit("clearDeBugMsg");
       store.commit("changeTabName", "editDebug");
       let isBookSource = /bookSource/.test(location.href),
@@ -218,7 +223,7 @@ export default {
           store.commit("appendDeBugMsg", msg.data);
         };
         socket.onclose = () => {
-          isShow.value = false;
+          showLoading.value = false;
           successText.value = "调试已关闭！";
           successShow.value = true;
           store.commit("appendDeBugMsg", "调试已关闭！");
@@ -259,7 +264,7 @@ export default {
       push,
       pull,
       clearEdit,
-      isShow,
+      showLoading,
       changeShow,
       warnShow,
       successText,
