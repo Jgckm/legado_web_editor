@@ -58,30 +58,25 @@ export default {
 
       const newHistory = history.new;
       if (newHistory.length) {
+        const idName = attr.value.getAttribute("id");
         if (
-          newHistory[newHistory.length - 1][attr.value.getAttribute("id")] !==
-          store.state.bookItemContent[attr.value.getAttribute("id")]
+          !idName.includes("_") &&
+          newHistory[newHistory.length - 1][idName] !==
+            store.state.currentSource[idName]
         ) {
-          store.commit("editHistory", store.state.bookItemContent);
-        } else {
-          const idName = attr.value.getAttribute("id");
-          if (idName.includes("_")) {
-            let rule1 = idName.split("_")[0];
-            let rule2 = idName.split("_")[1];
-            if (
-              newHistory[newHistory.length - 1][rule1][rule2] !==
-              store.state.bookItemContent[rule1][rule2]
-            ) {
-              store.commit("editHistory", store.state.bookItemContent);
-              console.log("添加记录");
-            }
-          } else {
-            console.log("重复历史，不记录");
+          store.commit("editHistory", store.state.currentSource);
+        } else if (idName.includes("_")) {
+          let rule1 = idName.split("_")[0];
+          let rule2 = idName.split("_")[1];
+          if (
+            newHistory[newHistory.length - 1][rule1][rule2] !==
+            store.state.currentSource[rule1][rule2]
+          ) {
+            store.commit("editHistory", store.state.currentSource);
           }
         }
       } else {
-        store.commit("editHistory", store.state.bookItemContent);
-        console.log("第一次记录");
+        store.commit("editHistory", store.state.currentSource);
       }
     };
     const changeHeight = () => {

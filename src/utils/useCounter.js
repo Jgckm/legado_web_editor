@@ -3,20 +3,20 @@ import store from "@/store";
 
 export default function () {
   const data = reactive({
-    bookContent: store.state.bookItemContent,
+    currentSource: store.state.currentSource
   });
-  const upData = (newContent) => {
-    // console.log(newContent);
-    store.commit("changeBookItemNewContent", newContent);
+  const upData = (data) => {
+    store.commit("changeCurrentSourceValue", data);
   };
-  const setContent = (elId) => {
+  const getContent = (elId) => {
     try {
       if (elId.includes("_")) {
         let rule1 = elId.split("_")[0];
         let rule2 = elId.split("_")[1];
-        return data.bookContent[rule1][rule2];
+        let obj = data.currentSource[rule1];
+        return obj ? obj[rule2] : null
       } else {
-        return data.bookContent[elId];
+        return data.currentSource[elId];
       }
     } catch (e) {
       console.log("导入错误", e.TypeError);
@@ -25,11 +25,11 @@ export default function () {
   };
 
   watchEffect(() => {
-    data.bookContent = store.state.bookItemContent;
+    data.currentSource = store.state.currentSource;
   });
   return {
     ...toRefs(data),
     upData,
-    setContent,
+    getContent,
   };
 }

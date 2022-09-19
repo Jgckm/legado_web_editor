@@ -11,10 +11,10 @@ export default {
 </script>
 
 <style lang="scss">
-@font-face {
-  font-family: "Cascadia";
-  src: url("@/assets/font/Cascadia-Code-Regular-2.ttf");
-}
+//@font-face {
+//  font-family: "Cascadia";
+//  src: url("@/assets/font/Cascadia-Code-Regular-2.ttf");
+//}
 .editor {
   display: flex;
   align-items: stretch;

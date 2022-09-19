@@ -1,73 +1,97 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import bookSource from "@/views/bookSource";
-import bookBase from "@/views/bookBase";
-import bookSearch from "@/views/bookSearch";
-import bookDirectory from "@/views/bookDirectory";
-import bookContent from "@/views/bookContent";
-import bookDetail from "@/views/bookDetail";
-import bookOther from "@/views/bookOther";
-import bookFind from "@/views/bookFind";
+import bookSource from "../views/bookSource/bookSource";
+import bookBase from "../views/bookSource/bookBase";
+import bookSearch from "../views/bookSource/bookSearch";
+import bookDirectory from "../views/bookSource/bookDirectory";
+import bookContent from "../views/bookSource/bookContent";
+import bookDetail from "../views/bookSource/bookDetail";
+import bookOther from "../views/bookSource/bookOther";
+import bookFind from "../views/bookSource/bookFind";
+import bookReview from "../views/bookSource/bookReview";
+
+import rssSource from "../views/rssSource/rssSource";
+import rssBase from "../views/rssSource/rssBase";
+import rssList from "../views/rssSource/rssList";
+import rssWebView from "../views/rssSource/rssWebView";
+import rssOther from "../views/rssSource/rssOther";
 
 const routes = [
   {
-    path: "/",
-    redirect: { name: "home" },
-  },
-  {
     path: "/bookSource",
-    name: "home",
+    name: "book-home",
     component: bookSource,
-    redirect: { name: "base" },
+    redirect: { name: "book-base" },
     children: [
       {
         path: "/bookSource/base",
-        name: "base",
+        name: "book-base",
         component: bookBase,
       },
       {
         path: "/bookSource/search",
-        name: "search",
+        name: "book-search",
         component: bookSearch,
       },
       {
         path: "/bookSource/find",
-        name: "find",
+        name: "book-find",
         component: bookFind,
       },
       {
         path: "/bookSource/detail",
-        name: "detail",
+        name: "book-detail",
         component: bookDetail,
       },
       {
         path: "/bookSource/directory",
-        name: "directory",
+        name: "book-directory",
         component: bookDirectory,
       },
       {
         path: "/bookSource/content",
-        name: "content",
+        name: "book-content",
         component: bookContent,
       },
       {
-        path: "/bookSource/other",
-        name: "other",
-        component: bookOther,
+        path: "/bookSource/review",
+        name: "book-review",
+        component: bookReview,
       },
       {
-        path: "/bookSource/:asdasdasd/:asdasdas",
-        redirect: { name: "home" },
+        path: "/bookSource/other",
+        name: "book-other",
+        component: bookOther,
       },
     ],
   },
   {
-    path: "/:asdasdasd",
-    redirect: { name: "home" },
-  },
-  {
-    path: "/bookSource/:asdasdasda",
-    redirect: { name: "home" },
+    path: "/rssSource",
+    name: "rss-home",
+    component: rssSource,
+    redirect: { name: "rss-base" },
+    children: [
+      {
+        path: "/rssSource/base",
+        name: "rss-base",
+        component: rssBase,
+      },
+      {
+        path: "/rssSource/list",
+        name: "rss-list",
+        component: rssList,
+      },
+      {
+        path: "/rssSource/webView",
+        name: "rss-webView",
+        component: rssWebView,
+      },
+      {
+        path: "/rssSource/other",
+        name: "rss-other",
+        component: rssOther,
+      },
+    ],
   },
 ];
 

@@ -5,7 +5,6 @@
       type="text"
       placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
       v-model="searchKey"
-      @input="sourcesList(searchKey)"
       @focus="delArr = []"
     />
     <div>
@@ -15,10 +14,10 @@
         <button @click="deleteActiveSource">删除选中源</button>
         <button @click="clearAllSources">清空列表</button>
       </div>
-      <div class="book_list">
+      <div class="source_list">
         <div
-          v-for="(data, index) in sourcesList(searchKey)"
-          :key="data.bookSourceUrl"
+          v-for="(data, index) in filtedSources"
+          :key="data.bookSourceUrl || data.sourceUrl"
           class="book_item"
           v-bind:class="index === currentActive ? 'book_active' : ''"
         >
@@ -29,11 +28,11 @@
             @click="handleItemClick(index)"
           >
             <div class="book_info">
-              <span>{{ data.bookSourceName }}</span>
-              <span>最后修改：{{ formatTime(data.lastUpdateTime) }}</span>
-              <span>分组：{{ data.bookSourceGroup || "无分组" }}</span>
+              <span>{{ data.bookSourceName || data.sourceName }}</span>
+              <span v-if="isBookSource">最后修改：{{ formatTime(data.lastUpdateTime)}}</span>
+              <span>分组：{{ data.bookSourceGroup || data.sourceGroup || "无分组" }}</span>
             </div>
-            <div>{{ data.bookSourceUrl }}</div>
+            <div>{{ data.bookSourceUrl || data.sourceUrl }}</div>
           </div>
         </div>
       </div>
@@ -42,30 +41,31 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs, watchEffect } from "vue";
+import { reactive, ref, toRefs, watchEffect, computed } from "vue";
 import store from "@/store";
-
-import { http } from "@/utils/http";
+import * as api from "@/utils/api";
 
 export default {
   name: "editList",
   setup() {
-    const bookSources = ref(store.state.bookSource);
     let data = reactive({
       searchKey: "",
       delArr: [],
+      sources: [],
+      filtedSources: []
     });
 
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
       store.commit("clearEdit");
-      store.commit("changeBookItemContent", sourcesList(data.searchKey)[index]);
+      store.commit("changeCurrentSource", data.filtedSources[index]);
     };
     const clearAllSources = () => {
       store.commit("clearAllSource");
     };
     const formatTime = (date) => {
+      if (!date) return null
       const time = new Date(date);
       const year = time.getFullYear();
 
@@ -98,51 +98,53 @@ export default {
         seconds
       );
     };
-    const sourcesList = (key) => {
-      if (key === "") {
-        return bookSources.value;
+    //筛选源
+    const filterSource = (sources, key) => {
+      if (key === "") return data.sources;
+      let isBookSource = /bookSource/.test(location.href);
+      if (isBookSource) {
+        return sources.filter((item) =>
+          item.bookSourceName.toUpperCase().includes(key.toUpperCase()) ||
+          (item.bookSourceGroup || "").toUpperCase().includes(key.toUpperCase()) ||
+          item.bookSourceUrl.toUpperCase().includes(key.toUpperCase())
+        );
       } else {
-        return (
-          bookSources.value.filter((item) =>
-            item.bookSourceName.toUpperCase().includes(key.toUpperCase())
-          ) ||
-          bookSources.value.filter((item) =>
-            item.bookSourceGroup.toUpperCase().includes(key.toUpperCase())
-          ) ||
-          bookSources.value.filter((item) =>
-            item.bookSourceUrl.toUpperCase().includes(key.toUpperCase())
-          )
+        return sources.filter((item) =>
+          item.sourceName.toUpperCase().includes(key.toUpperCase()) ||
+          (item.sourceGroup || "").toUpperCase().includes(key.toUpperCase()) ||
+          item.sourceUrl.toUpperCase().includes(key.toUpperCase())
         );
       }
     };
 
     watchEffect(() => {
-      bookSources.value = store.state.bookSource;
+      const isBookSource = /bookSource/.test(location.href);
+      const sources = isBookSource ? store.state.bookSources : store.state.rssSources;
+      data.sources = sources;
     });
-
+    watchEffect(() => {
+      data.filtedSources = filterSource(data.sources, data.searchKey);
+    });
+    const isBookSource = computed(() => {
+      return /bookSource/.test(window.location.href)
+    });
     const deleteActiveSource = () => {
       if (data.delArr.length === 0) {
         console.log("没有选中的书源");
         return false;
       }
       const delSources = [];
-      const source = sourcesList(data.searchKey);
-      data.delArr.forEach((item) => {
-        delSources.push(source[item]);
+      data.delArr.forEach((index) => {
+        delSources.push(data.filtedSources[index]);
       });
-
-      http("deleteBookSources", delSources).then((res) => {
+      api.deleteSources(delSources).then((res) => {
         if (res.isSuccess) {
           console.log("删除成功");
-          data.delArr.forEach((item) => {
-            source.splice(item, 1);
-            console.log(item);
+          data.delArr.forEach((index) => {
+            let deletedSource = data.filtedSources.splice(index, 1);
+            data.sources = data.sources.filter((source) => source !== deletedSource);
           });
           data.delArr = [];
-          http("getBookSources").then((res) => {
-            bookSources.value = res.data;
-            console.log("同步完成！");
-          });
         } else {
           console.log("错误", res);
         }
@@ -158,17 +160,22 @@ export default {
         reader.readAsText(file);
         reader.onload = () => {
           const jsonData = JSON.parse(reader.result);
-          store.commit("changeBookSource", jsonData);
+          store.commit("saveSources", jsonData);
         };
       });
       input.click();
     };
     const outExport = () => {
       const exportFile = document.createElement("a");
-      exportFile.download = `BookSources${Date()
+      let isBookSource = /bookSource/.test(location.href),
+        sources = isBookSource ? store.state.bookSources : store.state.rssSources,
+        sourceType = isBookSource ? "BookSource" : "RssSource";
+
+      exportFile.download = `${sourceType}_${Date()
         .replace(/.*?\s(\d+)\s(\d+)\s(\d+:\d+:\d+).*/, "$2$1$3")
         .replace(/:/g, "")}.json`;
-      let myBlob = new Blob([JSON.stringify(store.state.bookSource, null, 4)], {
+      
+      let myBlob = new Blob([JSON.stringify(sources, null, 4)], {
         type: "application/json",
       });
       exportFile.href = window.URL.createObjectURL(myBlob);
@@ -176,13 +183,12 @@ export default {
     };
     return {
       currentActive,
+      isBookSource,
       deleteActiveSource,
       handleItemClick,
       ...toRefs(data),
       formatTime,
-      sourcesList,
       clearAllSources,
-      bookSources,
       upFile,
       outExport,
     };
