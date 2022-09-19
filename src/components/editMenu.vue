@@ -64,7 +64,7 @@ export default {
       api.pullSources()
         .then((res) => {
           store.commit("changeTabName", "editList");
-          store.commit("saveSource", res.data);
+          store.commit("saveSources", res.data);
           isShow.value = false;
           successText.value = `成功拉取${res.data.length}条源`;
           successShow.value = true;
@@ -178,11 +178,11 @@ export default {
       store.commit("clearDeBugMsg");
       store.commit("changeTabName", "editDebug");
       let isBookSource = /bookSource/.test(location.href),
-      source = store.state.currentSource;
+        source = store.state.currentSource;
       api.pushSource(source).then((res) => {
         console.log(res);
         let wsUrl = "ws://" + (localStorage.getItem("url") || location.host).replace(/\d+$/, (port) => parseInt(port) + 1) + "/" +
-          isBookSource ? "bookSourceDebug" : "rssSourceDebug";
+          (isBookSource ? "bookSourceDebug" : "rssSourceDebug");
         console.log(wsUrl);
 
         const socket = new WebSocket(wsUrl);

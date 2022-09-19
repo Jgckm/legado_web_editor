@@ -7,33 +7,34 @@
       :hint="item.hint"
       :title="item.title"
       :rows="item.rows"
-      :content="setContent(item.id)"
+      :content="getContent(item.id)"
       @changeContent="upData"
     ></edit-input>
   </div>
 </template>
 
 <script>
-import useCounter from "@/utils/useCounter";
-import { reactive, toRefs } from "vue";
-
 import editInput from "@/components/editInput";
-import bookinfo from "@/utils/editConfig";
+import config from "@/utils/bookSourceEditConfig.js";
+import { reactive, toRefs } from "vue";
+import useCounter from "@/utils/useCounter";
+
 export default {
   components: {
     editInput,
   },
   setup() {
-    const { upData, bookContent, setContent } = useCounter();
+    const { upData, getContent } = useCounter();
     const data = reactive({
-      data: bookinfo.search,
+      data: config.directory,
     });
     return {
       ...toRefs(data),
       upData,
-      bookContent,
-      setContent,
+      getContent,
     };
   },
 };
 </script>
+
+<style lang="scss"></style>

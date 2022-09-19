@@ -461,7 +461,7 @@ export default {
     {
       title: "启用CookieJar",
       rows: 1,
-      id: "enabledExplore",
+      id: "enabledCookieJar",
       hint: "启用: true  关闭: false (可选,默认false)",
     },
     {

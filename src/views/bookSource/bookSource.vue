@@ -4,7 +4,7 @@
       <div><a href="/">←主页</a><b>书源</b></div>
       <ul>
         <router-link
-          :to="{ name: 'base' }"
+          :to="{ name: 'book-base' }"
           custom
           v-slot="{ navigate, isActive }"
         >
@@ -13,7 +13,7 @@
           </li>
         </router-link>
         <router-link
-          :to="{ name: 'search' }"
+          :to="{ name: 'book-search' }"
           custom
           v-slot="{ navigate, isActive }"
         >
@@ -22,7 +22,7 @@
           </li>
         </router-link>
         <router-link
-          :to="{ name: 'find' }"
+          :to="{ name: 'book-find' }"
           custom
           v-slot="{ navigate, isActive }"
         >
@@ -33,7 +33,7 @@
         <router-link
           custom
           v-slot="{ navigate, isActive }"
-          :to="{ name: 'detail' }"
+          :to="{ name: 'book-detail' }"
         >
           <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
             详情
@@ -42,7 +42,7 @@
         <router-link
           custom
           v-slot="{ navigate, isActive }"
-          :to="{ name: 'directory' }"
+          :to="{ name: 'book-directory' }"
         >
           <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
             目录
@@ -51,7 +51,7 @@
         <router-link
           custom
           v-slot="{ navigate, isActive }"
-          :to="{ name: 'content' }"
+          :to="{ name: 'book-content' }"
         >
           <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
             正文
@@ -60,7 +60,7 @@
         <router-link
           custom
           v-slot="{ navigate, isActive }"
-          :to="{ name: 'review' }"
+          :to="{ name: 'book-review' }"
         >
           <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
             段评
@@ -69,7 +69,7 @@
         <router-link
           custom
           v-slot="{ navigate, isActive }"
-          :to="{ name: 'other' }"
+          :to="{ name: 'book-other' }"
         >
           <li @click="navigate" :class="{ active: isActive ? 'active' : '' }">
             其他

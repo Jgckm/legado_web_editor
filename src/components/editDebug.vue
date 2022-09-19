@@ -7,7 +7,7 @@
     @input="changeSearch(searchKey)"
     @keydown.enter="startSearch"
     title="输入关键词 enter(回车键)快捷搜索"
-    v-if="/bookSource/.test(location.href)"
+    v-if="isBookSource"
   />
   <textarea
     placeholder="这里用于输出调试信息"
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs, watchEffect } from "vue";
+import { reactive, ref, toRefs, watchEffect, computed } from "vue";
 import store from "@/store";
 
 export default {
@@ -38,11 +38,15 @@ export default {
     const startSearch = () => {
       document.querySelectorAll(".menu>button")[6].click();
     };
+    const isBookSource = computed(() => {
+      return /bookSource/.test(window.location.href)
+    });
     return {
       ...toRefs(data),
       textareaDom,
       changeSearch,
       startSearch,
+      isBookSource
     };
   },
 };

@@ -7,7 +7,7 @@
       :hint="item.hint"
       :title="item.title"
       :rows="item.rows"
-      :content="bookContent[item.id]"
+      :content="getContent(item.id)"
       @changeContent="upData"
     ></edit-input>
   </div>
@@ -15,28 +15,23 @@
 
 <script>
 import editInput from "@/components/editInput";
-import bookinfo from "@/utils/editConfig.js";
-import { reactive, toRefs, watchEffect } from "vue";
-import store from "@/store";
+import config from "@/utils/bookSourceEditConfig.js";
+import { reactive, toRefs } from "vue";
+import useCounter from "@/utils/useCounter";
 
 export default {
   components: {
     editInput,
   },
   setup() {
+    const { upData, getContent } = useCounter();
     const data = reactive({
-      data: bookinfo.base,
-      bookContent: store.state.bookItemContent,
-    });
-    const upData = (newContent) => {
-      store.commit("changeBookItemNewContent", newContent);
-    };
-    watchEffect(() => {
-      data.bookContent = store.state.bookItemContent;
+      data: config.other,
     });
     return {
       ...toRefs(data),
       upData,
+      getContent,
     };
   },
 };

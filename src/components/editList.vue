@@ -5,6 +5,7 @@
       type="text"
       placeholder="输入筛选关键词（源名称、源URL或源分组）输入自动筛选源"
       v-model="searchKey"
+      @input="filterSource(searchKey)"
       @focus="delArr = []"
     />
     <div>
@@ -16,7 +17,7 @@
       </div>
       <div class="source_list">
         <div
-          v-for="(data, index) in sources"
+          v-for="(data, index) in filterSource(searchKey)"
           :key="data.bookSourceUrl || data.sourceUrl"
           class="book_item"
           v-bind:class="index === currentActive ? 'book_active' : ''"
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs, watch } from "vue";
+import { reactive, ref, toRefs, watchEffect } from "vue";
 import store from "@/store";
 import * as api from "@/utils/api";
 
@@ -98,45 +99,45 @@ export default {
       );
     };
     const filterSource = (key) => {
-      let isBookSource = /bookSource/.test(location.href),
-          sources = isBookSource ? store.state.bookSources : store.state.rssSources;
-      if (key === "") data.sources = sources;
+      if (key === "") return data.sources;
+      let isBookSource = /bookSource/.test(location.href);
       if (isBookSource) {
-        data.sources = sources.filter((item) =>
+        return data.sources.filter((item) =>
           item.bookSourceName.toUpperCase().includes(key.toUpperCase()) ||
-          item.bookSourceGroup.toUpperCase().includes(key.toUpperCase()) ||
+          (item.bookSourceGroup || "").toUpperCase().includes(key.toUpperCase()) ||
           item.bookSourceUrl.toUpperCase().includes(key.toUpperCase())
         );
       } else {
-        data.sources = sources.filter((item) =>
+        return data.sources.filter((item) =>
           item.sourceName.toUpperCase().includes(key.toUpperCase()) ||
-          item.sourceGroup.toUpperCase().includes(key.toUpperCase()) ||
+          (item.sourceGroup || "").toUpperCase().includes(key.toUpperCase()) ||
           item.sourceUrl.toUpperCase().includes(key.toUpperCase())
         );
       }
     };
-    watch(
-      () => data.searchKey,
-      (key) => filterSource(key)
-    );
-
+  watchEffect(() => {
+    const isBookSource = /bookSource/.test(location.href);
+    const sources = isBookSource ? store.state.bookSources : store.state.rssSources;
+    data.sources = sources;
+  });
     const deleteActiveSource = () => {
       if (data.delArr.length === 0) {
         console.log("没有选中的书源");
         return false;
       }
       const delSources = [];
+      const source = filterSource(data.searchKey);
       data.delArr.forEach((item) => {
-        delSources.push(data.sources[item]);
+        delSources.push(source[item]);
       });
-
       api.deleteSources(delSources).then((res) => {
         if (res.isSuccess) {
-          data.delArr = [];
-          api.pullSources().then((res) => {
-            store.commit("saveSource", res.data);
-            filterSource(data.searchKey);
+          console.log("删除成功");
+          data.delArr.forEach((item) => {
+            source.splice(item, 1);
+            console.log(item);
           });
+          data.delArr = [];
         } else {
           console.log("错误", res);
         }
@@ -177,6 +178,7 @@ export default {
       currentActive,
       deleteActiveSource,
       handleItemClick,
+      filterSource,
       ...toRefs(data),
       formatTime,
       clearAllSources,
