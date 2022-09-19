@@ -1,4 +1,3 @@
-
 /**
  * POST请求
  * @param url
@@ -26,30 +25,24 @@ function Get(url) {
   return fetch(url).then((res) => res.json());
 }
 
-
 function api(action, isArray = true) {
-   let isBookSource = /bookSource/.test(location.href),
-   url = `http://${localStorage.getItem("url") || location.host}/`,
-   target = isBookSource ? "BookSource" : "RssSource";
-   return `${url}${action}${target}${isArray ? "s" : ""}`
+  let isBookSource = /bookSource/.test(location.href),
+    url = `http://${localStorage.getItem("url") || location.host}/`,
+    target = isBookSource ? "BookSource" : "RssSource";
+  return `${url}${action}${target}${isArray ? "s" : ""}`;
 }
 
 function pullSources() {
-  return Get(api("get"))
+  return Get(api("get"));
 }
 function pushSources(data) {
-  return Post(api("save"), data)
+  return Post(api("save"), data);
 }
 function pushSource(source) {
-  return Post(api("save", false), source)
+  return Post(api("save", false), source);
 }
 function deleteSources(data) {
-  return Post(api("delete"), data)
+  return Post(api("delete"), data);
 }
 
-export {
-  pullSources,
-  pushSource,
-  pushSources,
-  deleteSources
-}
+export { pullSources, pushSource, pushSources, deleteSources };

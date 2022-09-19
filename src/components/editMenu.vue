@@ -61,7 +61,8 @@ export default {
 
     const pull = () => {
       isShow.value = true;
-      api.pullSources()
+      api
+        .pullSources()
         .then((res) => {
           store.commit("changeTabName", "editList");
           store.commit("saveSources", res.data);
@@ -82,8 +83,11 @@ export default {
       successText.value = "正在推送中";
       successShow.value = true;
       isShow.value = true;
-      let sources = /bookSource/.test(location.href) ? store.state.bookSources : store.state.rssSources;
-      api.pushSources(sources)
+      let sources = /bookSource/.test(location.href)
+        ? store.state.bookSources
+        : store.state.rssSources;
+      api
+        .pushSources(sources)
         .then((json) => {
           if (json.isSuccess) {
             let okData = json.data;
@@ -151,19 +155,22 @@ export default {
       let isBookSource = /bookSource/.test(location.href),
         source = store.state.currentSource;
       if (
-        isBookSource &&
-        source.bookSourceUrl !== "" &&
-        source.bookSourceType !== "" &&
-        source.bookSourceName !== "" ||
-        !isBookSource && source.sourceUrl !== "" &&
-        source.sourceName !== ""
+        (isBookSource &&
+          source.bookSourceUrl !== "" &&
+          source.bookSourceType !== "" &&
+          source.bookSourceName !== "") ||
+        (!isBookSource && source.sourceUrl !== "" && source.sourceName !== "")
       ) {
         api.pushSource(source).then((res) => {
           if (res.isSuccess) {
-            successText.value = `源《${isBookSource ? source.bookSourceName: source.sourceName}》已成功保存到「阅读3.0APP」`;
+            successText.value = `源《${
+              isBookSource ? source.bookSourceName : source.sourceName
+            }》已成功保存到「阅读3.0APP」`;
             successShow.value = true;
           } else {
-            warnText.value = `源《${isBookSource ? source.bookSourceName : source.sourceName}》保存失败!\nErrorMsg: ${res.errorMsg}`;
+            warnText.value = `源《${
+              isBookSource ? source.bookSourceName : source.sourceName
+            }》保存失败!\nErrorMsg: ${res.errorMsg}`;
             warnShow.value = true;
           }
         });
@@ -181,12 +188,19 @@ export default {
         source = store.state.currentSource;
       api.pushSource(source).then((res) => {
         console.log(res);
-        let wsUrl = "ws://" + (localStorage.getItem("url") || location.host).replace(/\d+$/, (port) => parseInt(port) + 1) + "/" +
+        let wsUrl =
+          "ws://" +
+          (localStorage.getItem("url") || location.host).replace(
+            /\d+$/,
+            (port) => parseInt(port) + 1
+          ) +
+          "/" +
           (isBookSource ? "bookSourceDebug" : "rssSourceDebug");
         console.log(wsUrl);
 
         const socket = new WebSocket(wsUrl);
-        let key = "", tag = isBookSource ? source.bookSourceUrl : source.sourceUrl;
+        let key = "",
+          tag = isBookSource ? source.bookSourceUrl : source.sourceUrl;
         if (isBookSource) {
           if (source.ruleSearch.checkKeyWord) {
             key = source.ruleSearch.checkKeyWord;
@@ -198,9 +212,7 @@ export default {
         }
 
         socket.onopen = () => {
-          socket.send(
-            `{"tag":"${tag}", "key":"${key}"}`
-          );
+          socket.send(`{"tag":"${tag}", "key":"${key}"}`);
         };
         socket.onmessage = (msg) => {
           store.commit("appendDeBugMsg", msg.data);

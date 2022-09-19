@@ -4,10 +4,10 @@ export default createStore({
   state: {
     url: localStorage.getItem("url") || "",
     bookSources: [], // 临时存放所有书源,
-    rssSources: [],   // 临时存放所有订阅源
+    rssSources: [], // 临时存放所有订阅源
     currentSource: {}, // 当前编辑的源
     currentTab: localStorage.getItem("tabName") || "editTab",
-    editTabSourceInfo: {},  // 生成序列化的json数据
+    editTabSourceInfo: {}, // 生成序列化的json数据
     deBugMsg: "",
     searchKey: "",
   },
@@ -34,9 +34,9 @@ export default createStore({
     changeCurrentSourceValue(state, data) {
       //convert string to boolean|number
       let convertor = {
-        "true": true,
-        "false" : false
-      }
+        true: true,
+        false: false,
+      };
       let value = convertor[data.value] || data.value;
       if (/\d+/.test(value)) {
         value = parseInt(value);
@@ -47,7 +47,10 @@ export default createStore({
           obj = {};
         obj[rule2] = value;
         //state.currentSource[rule1] is Object, use `Object.assign` to override value
-        state.currentSource[rule1] = Object.assign(state.currentSource[rule1] || {}, obj)
+        state.currentSource[rule1] = Object.assign(
+          state.currentSource[rule1] || {},
+          obj
+        );
       } else {
         state.currentSource[data.type] = value;
       }

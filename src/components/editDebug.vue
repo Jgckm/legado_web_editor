@@ -39,14 +39,14 @@ export default {
       document.querySelectorAll(".menu>button")[6].click();
     };
     const isBookSource = computed(() => {
-      return /bookSource/.test(window.location.href)
+      return /bookSource/.test(window.location.href);
     });
     return {
       ...toRefs(data),
       textareaDom,
       changeSearch,
       startSearch,
-      isBookSource
+      isBookSource,
     };
   },
 };

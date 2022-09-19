@@ -29,8 +29,14 @@
           >
             <div class="book_info">
               <span>{{ data.bookSourceName || data.sourceName }}</span>
-              <span v-if="isBookSource">最后修改：{{ formatTime(data.lastUpdateTime)}}</span>
-              <span>分组：{{ data.bookSourceGroup || data.sourceGroup || "无分组" }}</span>
+              <span v-if="isBookSource"
+                >最后修改：{{ formatTime(data.lastUpdateTime) }}</span
+              >
+              <span
+                >分组：{{
+                  data.bookSourceGroup || data.sourceGroup || "无分组"
+                }}</span
+              >
             </div>
             <div>{{ data.bookSourceUrl || data.sourceUrl }}</div>
           </div>
@@ -52,7 +58,7 @@ export default {
       searchKey: "",
       delArr: [],
       sources: [],
-      filtedSources: []
+      filtedSources: [],
     });
 
     let currentActive = ref(null);
@@ -65,7 +71,7 @@ export default {
       store.commit("clearAllSource");
     };
     const formatTime = (date) => {
-      if (!date) return null
+      if (!date) return null;
       const time = new Date(date);
       const year = time.getFullYear();
 
@@ -103,30 +109,38 @@ export default {
       if (key === "") return data.sources;
       let isBookSource = /bookSource/.test(location.href);
       if (isBookSource) {
-        return sources.filter((item) =>
-          item.bookSourceName.toUpperCase().includes(key.toUpperCase()) ||
-          (item.bookSourceGroup || "").toUpperCase().includes(key.toUpperCase()) ||
-          item.bookSourceUrl.toUpperCase().includes(key.toUpperCase())
+        return sources.filter(
+          (item) =>
+            item.bookSourceName.toUpperCase().includes(key.toUpperCase()) ||
+            (item.bookSourceGroup || "")
+              .toUpperCase()
+              .includes(key.toUpperCase()) ||
+            item.bookSourceUrl.toUpperCase().includes(key.toUpperCase())
         );
       } else {
-        return sources.filter((item) =>
-          item.sourceName.toUpperCase().includes(key.toUpperCase()) ||
-          (item.sourceGroup || "").toUpperCase().includes(key.toUpperCase()) ||
-          item.sourceUrl.toUpperCase().includes(key.toUpperCase())
+        return sources.filter(
+          (item) =>
+            item.sourceName.toUpperCase().includes(key.toUpperCase()) ||
+            (item.sourceGroup || "")
+              .toUpperCase()
+              .includes(key.toUpperCase()) ||
+            item.sourceUrl.toUpperCase().includes(key.toUpperCase())
         );
       }
     };
 
     watchEffect(() => {
       const isBookSource = /bookSource/.test(location.href);
-      const sources = isBookSource ? store.state.bookSources : store.state.rssSources;
+      const sources = isBookSource
+        ? store.state.bookSources
+        : store.state.rssSources;
       data.sources = sources;
     });
     watchEffect(() => {
       data.filtedSources = filterSource(data.sources, data.searchKey);
     });
     const isBookSource = computed(() => {
-      return /bookSource/.test(window.location.href)
+      return /bookSource/.test(window.location.href);
     });
     const deleteActiveSource = () => {
       if (data.delArr.length === 0) {
@@ -142,7 +156,9 @@ export default {
           console.log("删除成功");
           data.delArr.forEach((index) => {
             let deletedSource = data.filtedSources.splice(index, 1);
-            data.sources = data.sources.filter((source) => source !== deletedSource);
+            data.sources = data.sources.filter(
+              (source) => source !== deletedSource
+            );
           });
           data.delArr = [];
         } else {
@@ -168,13 +184,15 @@ export default {
     const outExport = () => {
       const exportFile = document.createElement("a");
       let isBookSource = /bookSource/.test(location.href),
-        sources = isBookSource ? store.state.bookSources : store.state.rssSources,
+        sources = isBookSource
+          ? store.state.bookSources
+          : store.state.rssSources,
         sourceType = isBookSource ? "BookSource" : "RssSource";
 
       exportFile.download = `${sourceType}_${Date()
         .replace(/.*?\s(\d+)\s(\d+)\s(\d+:\d+:\d+).*/, "$2$1$3")
         .replace(/:/g, "")}.json`;
-      
+
       let myBlob = new Blob([JSON.stringify(sources, null, 4)], {
         type: "application/json",
       });
