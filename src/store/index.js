@@ -7,7 +7,7 @@ export default createStore({
     rssSources: [], // 临时存放所有订阅源
     currentSource: {}, // 当前编辑的源
     currentTab: localStorage.getItem("tabName") || "editTab",
-    editTabSourceInfo: {}, // 生成序列化的json数据
+    editTabSource: {}, // 生成序列化的json数据
     deBugMsg: "",
     searchKey: "",
   },
@@ -23,6 +23,25 @@ export default createStore({
         state.bookSources = data;
       } else {
         state.rssSources = data;
+      }
+    },
+    //保存当前编辑源
+    saveCurrentSource(state) {
+      let source = state.currentSource, sources, searchKey;
+      if (/bookSource/.test(location.href)) {
+        source = state.bookSources;
+        searchKey = "bookSourceUrl";
+      } else {
+        source = state.rssSources;
+        searchKey = "sourceUrl";
+      }
+      let index = sources.findIndex(element =>
+        element[searchKey] === source[searchKey]
+      );
+      if (index > -1) {
+        sources.splice(index, 1, source);
+      } else {
+        sources.push(source);
       }
     },
     // 更改当前编辑的源
@@ -63,8 +82,9 @@ export default createStore({
       localStorage.setItem("tabName", tabName);
       console.log(tabName);
     },
-    changeEidtTabSourceInfo(state) {
-      state.editTabSourceInfo = state.currentSource;
+    changeEditTabSource(state, source) {
+      const newContent = JSON.stringify(source);
+      state.editTabSource = JSON.parse(newContent);
     },
     editHistory(state, history) {
       let historyObj;
@@ -97,7 +117,7 @@ export default createStore({
       localStorage.setItem("history", JSON.stringify({ new: [], old: [] }));
     },
     clearEdit(state) {
-      state.editTabSourceInfo = {};
+      state.editTabSource = {};
       state.currentSource = {};
     },
     appendDeBugMsg(state, msg) {

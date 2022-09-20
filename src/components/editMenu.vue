@@ -16,7 +16,8 @@
     </div>
     <button @click="push" title="Ctrl+P">⇈推送源 <span>Ctrl+P</span></button>
     <button @click="pull" title="Shift+P">⇊拉取源 <span>Shift+P</span></button>
-    <button @click="conver" title="Ctrl+E">⋙生成源<span>Ctrl+E</span></button>
+    <button @click="conver2Tab" title="Ctrl+E">⋙生成源<span>Ctrl+E</span></button>
+    <button @click="conver2Source" title="Shift+E">⋘编辑源<span>Shift+E</span></button>
     <button @click="clearEdit" title="Shift+C">
       ✗清空表单<span>Shift+C</span>
     </button>
@@ -133,9 +134,12 @@ export default {
         });
     };
 
-    const conver = () => {
-      store.commit("changeEidtTabSourceInfo");
+    const conver2Tab = () => {
+      store.commit("changeEditTabSource", store.state.currentSource);
       store.commit("changeTabName", "editTab");
+    };
+    const conver2Source = () => {
+      store.commit("changeCurrentSource", store.state.editTabSource);
     };
 
     const undo = () => {
@@ -172,6 +176,8 @@ export default {
               isBookSource ? source.bookSourceName : source.sourceName
             }》已成功保存到「阅读3.0APP」`;
             successShow.value = true;
+            //save to store.state
+            store.commit("saveCurrentSource");
           } else {
             warnText.value = `源《${
               isBookSource ? source.bookSourceName : source.sourceName
@@ -246,7 +252,11 @@ export default {
           clearEdit();
         }
         if (e.ctrlKey && e.key === "e") {
-          conver();
+          conver2Tab();
+          e.preventDefault();
+        }
+        if (e.shiftKey && e.key === "e") {
+          conver2Source();
           e.preventDefault();
         }
         if (e.shiftKey && e.key === "P") {
@@ -272,7 +282,8 @@ export default {
       successShow,
       undo,
       redo,
-      conver,
+      conver2Tab,
+      conver2Source,
       warnText,
       saveSource,
     };

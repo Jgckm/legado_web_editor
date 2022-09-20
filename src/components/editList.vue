@@ -155,10 +155,10 @@ export default {
         if (res.isSuccess) {
           console.log("删除成功");
           data.delArr.forEach((index) => {
-            let [deletedSource] = data.filtedSources.splice(index, 1);
-            data.sources = data.sources.filter(
-              (source) => source != deletedSource
-            );
+            let [deletedSource]= data.filtedSources.splice(index, 1);
+            let findIndex = data.sources.indexOf(deletedSource);
+            //ignored findIndex > -1
+            data.sources.splice(findIndex, 1);
           });
           data.delArr = [];
         } else {
