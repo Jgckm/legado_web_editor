@@ -176,6 +176,8 @@ export default {
               isBookSource ? source.bookSourceName : source.sourceName
             }》已成功保存到「阅读3.0APP」`;
             successShow.value = true;
+            //save to store.state
+            store.commit("saveCurrentSource");
           } else {
             warnText.value = `源《${
               isBookSource ? source.bookSourceName : source.sourceName

@@ -25,6 +25,25 @@ export default createStore({
         state.rssSources = data;
       }
     },
+    //保存当前编辑源
+    saveCurrentSource(state) {
+      let source = state.currentSource, sources, searchKey;
+      if (/bookSource/.test(location.href)) {
+        source = state.bookSources;
+        searchKey = "bookSourceUrl";
+      } else {
+        source = state.rssSources;
+        searchKey = "sourceUrl";
+      }
+      let index = sources.findIndex(element =>
+        element[searchKey] === source[searchKey]
+      );
+      if (index > -1) {
+        sources.splice(index, 1, source);
+      } else {
+        sources.push(source);
+      }
+    },
     // 更改当前编辑的源
     changeCurrentSource(state, source) {
       const newContent = JSON.stringify(source);
