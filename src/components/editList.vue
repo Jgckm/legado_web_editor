@@ -156,9 +156,9 @@ export default {
           console.log("删除成功");
           data.delArr.forEach((index) => {
             let [deletedSource]= data.filtedSources.splice(index, 1);
-            let index = data.sources.indexOf(deletedSource);
-            //ignored index > -1
-            data.sources.splice(index, 1);
+            let findIndex = data.sources.indexOf(deletedSource);
+            //ignored findIndex > -1
+            data.sources.splice(findIndex, 1);
           });
           data.delArr = [];
         } else {
