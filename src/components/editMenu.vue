@@ -16,8 +16,12 @@
     </div>
     <button @click="push" title="Ctrl+P">⇈推送源 <span>Ctrl+P</span></button>
     <button @click="pull" title="Shift+P">⇊拉取源 <span>Shift+P</span></button>
-    <button @click="conver2Tab" title="Ctrl+E">⋙生成源<span>Ctrl+E</span></button>
-    <button @click="conver2Source" title="Shift+E">⋘编辑源<span>Shift+E</span></button>
+    <button @click="conver2Tab" title="Ctrl+E">
+      ⋙生成源<span>Ctrl+E</span>
+    </button>
+    <button @click="conver2Source" title="Shift+E">
+      ⋘编辑源<span>Shift+E</span>
+    </button>
     <button @click="clearEdit" title="Shift+C">
       ✗清空表单<span>Shift+C</span>
     </button>

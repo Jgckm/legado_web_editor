@@ -27,7 +27,9 @@ export default createStore({
     },
     //保存当前编辑源
     saveCurrentSource(state) {
-      let source = state.currentSource, sources, searchKey;
+      let source = state.currentSource,
+        sources,
+        searchKey;
       if (/bookSource/.test(location.href)) {
         source = state.bookSources;
         searchKey = "bookSourceUrl";
@@ -35,8 +37,8 @@ export default createStore({
         source = state.rssSources;
         searchKey = "sourceUrl";
       }
-      let index = sources.findIndex(element =>
-        element[searchKey] === source[searchKey]
+      let index = sources.findIndex(
+        (element) => element[searchKey] === source[searchKey]
       );
       if (index > -1) {
         sources.splice(index, 1, source);
