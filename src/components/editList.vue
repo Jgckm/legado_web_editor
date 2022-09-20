@@ -275,7 +275,7 @@ input[type="checkbox"] {
   justify-content: space-between;
 }
 
-.book_list {
+.source_list {
   height: calc(100vh - 125px);
   overflow-y: auto;
 }
