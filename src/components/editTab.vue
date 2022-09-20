@@ -1,7 +1,8 @@
 <template>
   <textarea
     placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"
-    v-model="sourceInfo"
+    v-model="source"
+    @input="updateEditSource"
   ></textarea>
 </template>
 <script>
@@ -12,19 +13,23 @@ export default {
   name: "editTab",
   setup() {
     const data = reactive({
-      sourceInfo: "",
+      source: "",
     });
+    const updateEditSource = () => {
+      store.commit("changeEditTabSource", JSON.parse(data.source));
+    };
     watchEffect(() => {
-      let sourceInfo = store.state.editTabSourceInfo;
-      if (Object.keys(sourceInfo).length > 0) {
-        sourceInfo.lastUpdateTime = new Date().getTime();
-        data.sourceInfo = JSON.stringify(sourceInfo, null, 4);
+      let source = store.state.editTabSource;
+      if (Object.keys(source).length > 0) {
+        source.lastUpdateTime = new Date().getTime();
+        data.source = JSON.stringify(source, null, 4);
       } else {
-        data.sourceInfo = "";
+        data.source = "";
       }
     });
     return {
       ...toRefs(data),
+      updateEditSource,
     };
   },
 };
