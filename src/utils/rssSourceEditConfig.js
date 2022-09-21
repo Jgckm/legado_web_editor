@@ -55,6 +55,12 @@ export default {
       hint: "<选填>登录检测js",
     },
     {
+      title: "封面解密",
+      rows: 3,
+      id: "coverDecodeJs",
+      hint: "<选填>封面解密js",
+    },
+    {
       title: "并发率",
       rows: 1,
       id: "concurrentRate",
