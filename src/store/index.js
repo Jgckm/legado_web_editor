@@ -51,18 +51,17 @@ export default createStore({
     },
     // 修改当前源的某一个值
     changeCurrentSourceValue(state, data) {
-      //convert string to boolean|number
+      let value = data.value;
       let convertor = {
-        true: true,
-        false: false,
+        "true": true,
+        "false": false
       };
-      let value = convertor[data.value] || data.value;
-      if (/\d+/.test(value)) {
-        value = parseInt(value);
-      }
-      if (data.type.includes("_")) {
-        let rule1 = data.type.split("_")[0],
-          rule2 = data.type.split("_")[1],
+      if (data.type === "Boolean") value = convertor[value] || value;
+      if (data.type === "Number") value = Number(value) || value;
+
+      if (data.key.includes("_")) {
+        let rule1 = data.key.split("_")[0],
+          rule2 = data.key.split("_")[1],
           obj = {};
         obj[rule2] = value;
         //state.currentSource[rule1] is Object, use `Object.assign` to override value
@@ -71,7 +70,7 @@ export default createStore({
           obj
         );
       } else {
-        state.currentSource[data.type] = value;
+        state.currentSource[data.key] = value;
       }
       // edit last time
       state.currentSource.lastUpdateTime = new Date().getTime();

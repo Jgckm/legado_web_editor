@@ -3,7 +3,8 @@
     <edit-input
       v-for="(item, index) in data"
       :key="index"
-      :type="item.id"
+      :id="item.id"
+      :type="item.type"
       :hint="item.hint"
       :title="item.title"
       :rows="item.rows"
