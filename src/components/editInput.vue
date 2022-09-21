@@ -2,7 +2,8 @@
   <div class="edit_input">
     <span>{{ title }}<i>:</i></span>
     <textarea
-      :id="type"
+      :id="id"
+      :class="type"
       :placeholder="hint"
       :rows="rows"
       :value="content"
@@ -32,9 +33,13 @@ export default {
       type: String,
       default: "",
     },
-    type: {
+    id: {
       type: String,
       default: "",
+    },
+    type: {
+      type: String,
+      default: "String",
     },
     content: {
       type: [String, Number, Boolean],
@@ -47,7 +52,8 @@ export default {
     const change = () => {
       emit("changeContent", {
         value: attr.value.value,
-        type: attr.value.getAttribute("id"),
+        key: attr.value.getAttribute("id"),
+        type: attr.value.getAttribute("class"),
       });
     };
     const changeHistory = () => {
