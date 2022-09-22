@@ -43,6 +43,7 @@ export default {
   padding: 20px;
   border-radius: 8px;
   font-size: 18px;
+  z-index: 100;
 }
 button {
   float: right;
