@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs, watchEffect, computed } from "vue";
+import { reactive, ref, toRefs, computed, watchEffect } from "vue";
 import store from "@/store";
 import * as api from "@/utils/api";
 
@@ -64,6 +64,9 @@ export default {
     });
     const isBookSource = computed(() => {
       return /bookSource/.test(window.location.href);
+    });
+    watchEffect(() => {
+      data.sources = store.getters.sources;
     });
     let currentActive = ref(null);
     const handleItemClick = (index) => {
@@ -132,13 +135,6 @@ export default {
       }
     };
 
-    watchEffect(() => {
-      const sources = isBookSource.value
-        ? store.state.bookSources
-        : store.state.rssSources;
-      data.sources = sources;
-    });
-
     const deleteActiveSource = () => {
       if (data.delArr.length === 0) {
         console.log("没有选中的书源");
@@ -151,10 +147,7 @@ export default {
       api.deleteSources(delSources).then((res) => {
         if (res.isSuccess) {
           console.log("删除成功");
-          data.delArr.forEach((index) => {
-            let findIndex = data.sources.indexOf(filtedSources.value[index]);
-            if (findIndex > -1) data.sources.splice(findIndex, 1);
-          });
+          store.commit("deleteSources", delSources);
           data.delArr = [];
         } else {
           console.log("错误", res);
@@ -178,9 +171,7 @@ export default {
     };
     const outExport = () => {
       const exportFile = document.createElement("a");
-      let sources = isBookSource.value
-          ? store.state.bookSources
-          : store.state.rssSources,
+      let sources = store.getters.sources,
         sourceType = isBookSource.value ? "BookSource" : "RssSource";
 
       exportFile.download = `${sourceType}_${Date()

@@ -93,9 +93,7 @@ export default {
       successText.value = "正在推送中";
       successShow.value = true;
       showLoading.value = true;
-      let sources = /bookSource/.test(location.href)
-        ? store.state.bookSources
-        : store.state.rssSources;
+      let sources = store.getters.sources;
       api
         .pushSources(sources)
         .then((json) => {
