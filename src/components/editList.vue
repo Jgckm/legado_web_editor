@@ -58,14 +58,18 @@ export default {
       searchKey: "",
       delArr: [],
       sources: [],
-      filtedSources: [],
     });
-
+    const filtedSources = computed(() => {
+      return filterSource(data.sources, data.searchKey);
+    });
+    const isBookSource = computed(() => {
+      return /bookSource/.test(window.location.href);
+    });
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
       store.commit("clearEdit");
-      store.commit("changeCurrentSource", data.filtedSources[index]);
+      store.commit("changeCurrentSource", filtedSources.value[index]);
     };
     const clearAllSources = () => {
       store.commit("clearAllSource");
@@ -107,8 +111,7 @@ export default {
     //筛选源
     const filterSource = (sources, key) => {
       if (key === "") return data.sources;
-      let isBookSource = /bookSource/.test(location.href);
-      if (isBookSource) {
+      if (isBookSource.value) {
         return sources.filter(
           (item) =>
             item.bookSourceName.toUpperCase().includes(key.toUpperCase()) ||
@@ -130,18 +133,12 @@ export default {
     };
 
     watchEffect(() => {
-      const isBookSource = /bookSource/.test(location.href);
-      const sources = isBookSource
+      const sources = isBookSource.value
         ? store.state.bookSources
         : store.state.rssSources;
       data.sources = sources;
     });
-    watchEffect(() => {
-      data.filtedSources = filterSource(data.sources, data.searchKey);
-    });
-    const isBookSource = computed(() => {
-      return /bookSource/.test(window.location.href);
-    });
+
     const deleteActiveSource = () => {
       if (data.delArr.length === 0) {
         console.log("没有选中的书源");
@@ -149,16 +146,14 @@ export default {
       }
       const delSources = [];
       data.delArr.forEach((index) => {
-        delSources.push(data.filtedSources[index]);
+        delSources.push(filtedSources.value[index]);
       });
       api.deleteSources(delSources).then((res) => {
         if (res.isSuccess) {
           console.log("删除成功");
           data.delArr.forEach((index) => {
-            let [deletedSource] = data.filtedSources.splice(index, 1);
-            let findIndex = data.sources.indexOf(deletedSource);
-            //ignored findIndex > -1
-            data.sources.splice(findIndex, 1);
+            let findIndex = data.sources.indexOf(filtedSources.value[index]);
+            if (findIndex > -1) data.sources.splice(findIndex, 1);
           });
           data.delArr = [];
         } else {
@@ -183,11 +178,10 @@ export default {
     };
     const outExport = () => {
       const exportFile = document.createElement("a");
-      let isBookSource = /bookSource/.test(location.href),
-        sources = isBookSource
+      let sources = isBookSource.value
           ? store.state.bookSources
           : store.state.rssSources,
-        sourceType = isBookSource ? "BookSource" : "RssSource";
+        sourceType = isBookSource.value ? "BookSource" : "RssSource";
 
       exportFile.download = `${sourceType}_${Date()
         .replace(/.*?\s(\d+)\s(\d+)\s(\d+:\d+:\d+).*/, "$2$1$3")
@@ -202,6 +196,7 @@ export default {
     return {
       currentActive,
       isBookSource,
+      filtedSources,
       deleteActiveSource,
       handleItemClick,
       ...toRefs(data),
