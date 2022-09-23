@@ -11,7 +11,12 @@ export default createStore({
     deBugMsg: "",
     searchKey: "",
   },
-  getters: {},
+  getters: {
+    sources(state) {
+      return /bookSource/.test(location.href) ?
+        state.bookSources : state.rssSources
+    },
+  },
   mutations: {
     changeSearchKey(state, key) {
       state.searchKey = key;
@@ -24,6 +29,15 @@ export default createStore({
       } else {
         state.rssSources = data;
       }
+    },
+    //删除源
+    deleteSources(state, data) {
+      let sources = /bookSource/.test(location.href) ?
+        state.bookSources : state.rssSources;
+      data.forEach((source) => {
+        let index = sources.indexOf(source);
+        if (index > -1) sources.splice(index, 1);
+      });
     },
     //保存当前编辑源
     saveCurrentSource(state) {
