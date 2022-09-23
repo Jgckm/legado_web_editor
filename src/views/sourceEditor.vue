@@ -1,7 +1,6 @@
 <template>
   <div class="left">
     <div>
-      <div><a href="/">←主页</a><b>{{ title }}</b></div>
       <ul>
         <li v-for="[key, value] in Object.entries(config)"
           @click="changeSelectTabKey(key)"
@@ -33,16 +32,15 @@ export default {
   setup() {
     const data = reactive({
       config: {},
-      title: "",
       selectTabKey: "base",
     });
 
     if (/bookSource/.test(location.href)) {
       data.config = bookSourceConfig;
-      data.title = "书源";
+      document.title = "书源编辑";
     } else {
       data.config = rssSourceConfig;
-      data.title = "订阅源";
+      document.title = "订阅源编辑";
     }
 
     const changeSelectTabKey = (key) => data.selectTabKey = key;
