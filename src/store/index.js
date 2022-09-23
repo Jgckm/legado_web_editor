@@ -31,10 +31,10 @@ export default createStore({
         sources,
         searchKey;
       if (/bookSource/.test(location.href)) {
-        source = state.bookSources;
+        sources = state.bookSources;
         searchKey = "bookSourceUrl";
       } else {
-        source = state.rssSources;
+        sources = state.rssSources;
         searchKey = "sourceUrl";
       }
       let index = sources.findIndex(
