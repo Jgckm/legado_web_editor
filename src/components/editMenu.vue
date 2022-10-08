@@ -15,18 +15,14 @@
       ></edit-success>
     </div>
     <button @click="push" title="Ctrl+P">⇈推送源 <span>Ctrl+P</span></button>
-    <button @click="pull" title="Shift+P">⇊拉取源 <span>Shift+P</span></button>
+    <button @click="pull">⇊拉取源</button>
     <button @click="conver2Tab" title="Ctrl+E">
       ⋙生成源<span>Ctrl+E</span>
     </button>
-    <button @click="conver2Source" title="Shift+E">
-      ⋘编辑源<span>Shift+E</span>
-    </button>
-    <button @click="clearEdit" title="Shift+C">
-      ✗清空表单<span>Shift+C</span>
-    </button>
+    <button @click="conver2Source">⋘编辑源</button>
+    <button @click="clearEdit">✗清空表单</button>
     <button @click="undo" title="Ctrl+Z">↶撤销操作<span>Ctrl+Z</span></button>
-    <button @click="redo" title="Shift+R">↷重做操作<span>Shift+R</span></button>
+    <button @click="redo">↷重做操作</button>
     <button @click="debug" title="Ctrl+Enter">
       ⇏调试源 <span>Ctrl+Enter</span>
     </button>
@@ -247,22 +243,9 @@ export default {
           saveSource();
           e.preventDefault();
         }
-        if (e.shiftKey && e.key === "R") {
-          redo();
-        }
-        if (e.shiftKey && e.key === "C") {
-          clearEdit();
-        }
         if (e.ctrlKey && e.key === "e") {
           conver2Tab();
           e.preventDefault();
-        }
-        if (e.shiftKey && e.key === "e") {
-          conver2Source();
-          e.preventDefault();
-        }
-        if (e.shiftKey && e.key === "P") {
-          pull();
         }
         if (e.ctrlKey && e.key === "p") {
           push();
