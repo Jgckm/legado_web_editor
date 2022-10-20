@@ -47,6 +47,7 @@ jobs:
           echo "APP_VER=$version" >> $GITHUB_ENV
 
       - name: Push changes to legado
+        continue-on-error: true
         # if: ${{ github.actor == 'gedoor' }}
         run: |
           git config --global user.name "github-actions[bot]"
