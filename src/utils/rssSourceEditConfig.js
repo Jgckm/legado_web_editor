@@ -190,7 +190,7 @@ export default {
       {
         title: "注入规则",
         rows: 3,
-        id: "style",
+        id: "injectJs",
         type: "String",
         hint: "注入网页的JavaScript",
       },
