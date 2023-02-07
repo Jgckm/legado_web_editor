@@ -206,7 +206,7 @@ export default {
         rows: 1,
         id: "contentWhitelist",
         type: "String",
-        hint: "webView链接加载黑名单，英文逗号隔开",
+        hint: "webView链接加载白名单，英文逗号隔开",
       },
     ],
   },
