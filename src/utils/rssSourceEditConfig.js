@@ -194,6 +194,20 @@ export default {
         type: "String",
         hint: "注入网页的JavaScript",
       },
+      {
+        title: "黑名单",
+        rows: 1,
+        id: "contentBlacklist",
+        type: "String",
+        hint: "webView链接加载黑名单，英文逗号隔开",
+      },
+      {
+        title: "白名单",
+        rows: 1,
+        id: "contentWhitelist",
+        type: "String",
+        hint: "webView链接加载黑名单，英文逗号隔开",
+      },
     ],
   },
   other: {
