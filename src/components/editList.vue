@@ -137,7 +137,6 @@ export default {
 
     const deleteActiveSource = () => {
       if (data.delArr.length === 0) {
-        console.log("没有选中的书源");
         return false;
       }
       const delSources = [];
@@ -146,11 +145,8 @@ export default {
       });
       api.deleteSources(delSources).then((res) => {
         if (res.isSuccess) {
-          console.log("删除成功");
           store.commit("deleteSources", delSources);
           data.delArr = [];
-        } else {
-          console.log("错误", res);
         }
       });
     };

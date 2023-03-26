@@ -102,7 +102,6 @@ export default createStore({
     changeTabName(state, tabName) {
       state.currentTab = tabName;
       localStorage.setItem("tabName", tabName);
-      console.log(tabName);
     },
     changeEditTabSource(state, source) {
       const newContent = JSON.stringify(source);

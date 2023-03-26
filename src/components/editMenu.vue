@@ -56,9 +56,15 @@ export default {
     };
     // successShow
     const changeSuccessShow = (bool) => {
-      console.log(bool);
       successShow.value = bool;
     };
+
+    const apiExceptionHandler = (error) => {
+      throw(error);
+      showLoading.value = false;
+      warnShow.value = true;
+      warnText.value = `请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务`;
+    }
 
     const pull = () => {
       showLoading.value = true;
@@ -77,11 +83,7 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
-          showLoading.value = false;
-          warnText.value =
-            " 请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务";
-          warnShow.value = true;
+          apiExceptionHandler(err);
         });
     };
 
@@ -98,13 +100,6 @@ export default {
             if (Array.isArray(okData)) {
               let failMsg = ``;
               if (sources.length > okData.length) {
-                sources.forEach((item) => {
-                  if (
-                    !okData.find((x) => x.bookSourceUrl === item.bookSourceUrl)
-                  ) {
-                    console.log(item.bookSourceUrl);
-                  }
-                });
                 failMsg = "\n推送失败的源将用红色字体标注!";
               }
               successText.value = `批量推送源到「阅读3.0APP」\n共计: ${
@@ -125,10 +120,7 @@ export default {
           showLoading.value = false;
         })
         .catch((err) => {
-          console.log(err);
-          showLoading.value = false;
-          warnShow.value = true;
-          warnText.value = `请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务`;
+          apiExceptionHandler(err);
         });
     };
 
@@ -146,7 +138,6 @@ export default {
 
     const clearEdit = () => {
       store.commit("clearEdit");
-      console.log("已清除");
       successText.value = "已清除";
       successShow.value = true;
     };
@@ -182,6 +173,9 @@ export default {
             }》保存失败!\nErrorMsg: ${res.errorMsg}`;
             warnShow.value = true;
           }
+        })
+        .catch((err) => {
+          apiExceptionHandler(err);
         });
       } else {
         warnText.value = `请检查<必填>项是否全部填写`;
@@ -196,7 +190,6 @@ export default {
       let isBookSource = /bookSource/.test(location.href),
         source = store.state.currentSource;
       api.pushSource(source).then((res) => {
-        console.log(res);
         let wsUrl =
           "ws://" +
           (localStorage.getItem("url") || location.host).replace(
@@ -205,7 +198,6 @@ export default {
           ) +
           "/" +
           (isBookSource ? "bookSourceDebug" : "rssSourceDebug");
-        console.log(wsUrl);
 
         const socket = new WebSocket(wsUrl);
         let key = "",
@@ -232,6 +224,9 @@ export default {
           successShow.value = true;
           store.commit("appendDeBugMsg", "调试已关闭！");
         };
+      })
+      .catch((err) => {
+        apiExceptionHandler(err);
       });
     };
     onMounted(() => {

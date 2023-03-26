@@ -19,7 +19,7 @@ export default function () {
         return data.currentSource[elId];
       }
     } catch (e) {
-      console.log("导入错误", e.TypeError);
+      throw(e);
       store.commit("clearEdit");
     }
   };
