@@ -63,8 +63,8 @@ export default {
       showLoading.value = false;
       warnShow.value = true;
       warnText.value = `请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务`;
-      throw (error);
-    }
+      throw error;
+    };
 
     const pull = () => {
       showLoading.value = true;
@@ -159,24 +159,26 @@ export default {
           source.bookSourceName !== "") ||
         (!isBookSource && source.sourceUrl !== "" && source.sourceName !== "")
       ) {
-        api.pushSource(source).then((res) => {
-          if (res.isSuccess) {
-            successText.value = `源《${
-              isBookSource ? source.bookSourceName : source.sourceName
-            }》已成功保存到「阅读3.0APP」`;
-            successShow.value = true;
-            //save to store.state
-            store.commit("saveCurrentSource");
-          } else {
-            warnText.value = `源《${
-              isBookSource ? source.bookSourceName : source.sourceName
-            }》保存失败!\nErrorMsg: ${res.errorMsg}`;
-            warnShow.value = true;
-          }
-        })
-        .catch((err) => {
-          apiExceptionHandler(err);
-        });
+        api
+          .pushSource(source)
+          .then((res) => {
+            if (res.isSuccess) {
+              successText.value = `源《${
+                isBookSource ? source.bookSourceName : source.sourceName
+              }》已成功保存到「阅读3.0APP」`;
+              successShow.value = true;
+              //save to store.state
+              store.commit("saveCurrentSource");
+            } else {
+              warnText.value = `源《${
+                isBookSource ? source.bookSourceName : source.sourceName
+              }》保存失败!\nErrorMsg: ${res.errorMsg}`;
+              warnShow.value = true;
+            }
+          })
+          .catch((err) => {
+            apiExceptionHandler(err);
+          });
       } else {
         warnText.value = `请检查<必填>项是否全部填写`;
         warnShow.value = true;
@@ -189,45 +191,47 @@ export default {
       store.commit("changeTabName", "editDebug");
       let isBookSource = /bookSource/.test(location.href),
         source = store.state.currentSource;
-      api.pushSource(source).then((res) => {
-        let wsUrl =
-          "ws://" +
-          (localStorage.getItem("url") || location.host).replace(
-            /\d+$/,
-            (port) => parseInt(port) + 1
-          ) +
-          "/" +
-          (isBookSource ? "bookSourceDebug" : "rssSourceDebug");
+      api
+        .pushSource(source)
+        .then((res) => {
+          let wsUrl =
+            "ws://" +
+            (localStorage.getItem("url") || location.host).replace(
+              /\d+$/,
+              (port) => parseInt(port) + 1
+            ) +
+            "/" +
+            (isBookSource ? "bookSourceDebug" : "rssSourceDebug");
 
-        const socket = new WebSocket(wsUrl);
-        let key = "",
-          tag = isBookSource ? source.bookSourceUrl : source.sourceUrl;
-        if (isBookSource) {
-          if (source.ruleSearch.checkKeyWord) {
-            key = source.ruleSearch.checkKeyWord;
-          } else if (store.state.searchKey) {
-            key = store.state.searchKey;
-          } else {
-            key = "我的";
+          const socket = new WebSocket(wsUrl);
+          let key = "",
+            tag = isBookSource ? source.bookSourceUrl : source.sourceUrl;
+          if (isBookSource) {
+            if (source.ruleSearch.checkKeyWord) {
+              key = source.ruleSearch.checkKeyWord;
+            } else if (store.state.searchKey) {
+              key = store.state.searchKey;
+            } else {
+              key = "我的";
+            }
           }
-        }
 
-        socket.onopen = () => {
-          socket.send(`{"tag":"${tag}", "key":"${key}"}`);
-        };
-        socket.onmessage = (msg) => {
-          store.commit("appendDeBugMsg", msg.data);
-        };
-        socket.onclose = () => {
-          showLoading.value = false;
-          successText.value = "调试已关闭！";
-          successShow.value = true;
-          store.commit("appendDeBugMsg", "调试已关闭！");
-        };
-      })
-      .catch((err) => {
-        apiExceptionHandler(err);
-      });
+          socket.onopen = () => {
+            socket.send(`{"tag":"${tag}", "key":"${key}"}`);
+          };
+          socket.onmessage = (msg) => {
+            store.commit("appendDeBugMsg", msg.data);
+          };
+          socket.onclose = () => {
+            showLoading.value = false;
+            successText.value = "调试已关闭！";
+            successShow.value = true;
+            store.commit("appendDeBugMsg", "调试已关闭！");
+          };
+        })
+        .catch((err) => {
+          apiExceptionHandler(err);
+        });
     };
     onMounted(() => {
       document.onkeydown = (e) => {
