@@ -19,7 +19,6 @@ export default function () {
         return data.currentSource[elId];
       }
     } catch (e) {
-      throw(e);
       store.commit("clearEdit");
     }
   };

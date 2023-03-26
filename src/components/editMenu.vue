@@ -60,10 +60,10 @@ export default {
     };
 
     const apiExceptionHandler = (error) => {
-      throw(error);
       showLoading.value = false;
       warnShow.value = true;
       warnText.value = `请求发生了错误，请检查你的后端地址，填写是否正确，或者 阅读APP\n确认开启web服务`;
+      throw (error);
     }
 
     const pull = () => {
