@@ -1,12 +1,14 @@
 import { reactive, toRefs, watchEffect } from "vue";
-import store from "@/store";
+import { useSourceStore } from "@/store";
 
 export default function () {
+  const store = useSourceStore();
+
   const data = reactive({
-    currentSource: store.state.currentSource,
+    currentSource: store.currentSource,
   });
   const upData = (data) => {
-    store.commit("changeCurrentSourceValue", data);
+    store.changeCurrentSourceValue(data);
   };
   const getContent = (elId) => {
     try {
@@ -24,7 +26,7 @@ export default function () {
   };
 
   watchEffect(() => {
-    data.currentSource = store.state.currentSource;
+    data.currentSource = store.currentSource;
   });
   return {
     ...toRefs(data),

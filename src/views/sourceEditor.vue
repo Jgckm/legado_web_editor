@@ -19,9 +19,9 @@
 </template>
 <script>
 import { onMounted, reactive, toRefs, computed } from "vue";
-import editMenu from "@/components/editMenu";
-import editOut from "@/components/editOut";
-import editInputList from "@/components/editInputList";
+import editMenu from "@/components/editMenu.vue";
+import editOut from "@/components/editOut.vue";
+import editInputList from "@/components/editInputList.vue";
 import bookSourceConfig from "@/utils/bookSourceEditConfig.js";
 import rssSourceConfig from "@/utils/rssSourceEditConfig.js";
 

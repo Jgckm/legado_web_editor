@@ -48,12 +48,14 @@
 
 <script>
 import { reactive, ref, toRefs, computed, watchEffect } from "vue";
-import store from "@/store";
-import * as api from "@/utils/api";
+import * as api from "@/utils/api.js";
+import { useSourceStore } from "@/store";
 
 export default {
   name: "editList",
   setup() {
+    const store = useSourceStore();
+
     let data = reactive({
       searchKey: "",
       delArr: [],
@@ -66,16 +68,16 @@ export default {
       return /bookSource/.test(window.location.href);
     });
     watchEffect(() => {
-      data.sources = store.getters.sources;
+      data.sources = store.sources;
     });
     let currentActive = ref(null);
     const handleItemClick = (index) => {
       currentActive.value = index;
-      store.commit("clearEdit");
-      store.commit("changeCurrentSource", filtedSources.value[index]);
+      store.clearEdit();
+      store.changeCurrentSource(filtedSources.value[index]);
     };
     const clearAllSources = () => {
-      store.commit("clearAllSource");
+      store.clearAllSource();
     };
     const formatTime = (date) => {
       if (!date) return null;
@@ -145,7 +147,7 @@ export default {
       });
       api.deleteSources(delSources).then((res) => {
         if (res.isSuccess) {
-          store.commit("deleteSources", delSources);
+          store.deleteSources(delSources);
           data.delArr = [];
         }
       });
@@ -160,14 +162,14 @@ export default {
         reader.readAsText(file);
         reader.onload = () => {
           const jsonData = JSON.parse(reader.result);
-          store.commit("saveSources", jsonData);
+          store.saveSources(jsonData);
         };
       });
       input.click();
     };
     const outExport = () => {
       const exportFile = document.createElement("a");
-      let sources = store.getters.sources,
+      let sources = store.sources,
         sourceType = isBookSource.value ? "BookSource" : "RssSource";
 
       exportFile.download = `${sourceType}_${Date()

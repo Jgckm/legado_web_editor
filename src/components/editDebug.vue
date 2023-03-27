@@ -19,21 +19,22 @@
 
 <script>
 import { reactive, ref, toRefs, watchEffect, computed } from "vue";
-import store from "@/store";
+import { useSourceStore } from "@/store";
 
 export default {
   name: "editDebug",
   setup() {
+    const store = useSourceStore();
     const textareaDom = ref("");
     const data = reactive({
-      printDebug: store.state.deBugMsg,
+      printDebug: store.deBugMsg,
       searchKey: "",
     });
     const changeSearch = (key) => {
-      store.commit("changeSearchKey", key);
+      store.searchKey = key;
     };
     watchEffect(() => {
-      data.printDebug = store.state.deBugMsg;
+      data.printDebug = store.deBugMsg;
     });
     const startSearch = () => {
       document.querySelectorAll(".menu>button")[7].click();

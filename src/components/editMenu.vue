@@ -35,15 +35,17 @@
 <script>
 import * as api from "@/utils/api";
 import { onMounted, ref } from "vue";
-import store from "@/store";
+import { useSourceStore } from "@/store";
 
-import editLoading from "@/components/message/editLoading";
-import editWarn from "@/components/message/editWarn";
-import editSuccess from "@/components/message/editSuccess";
+import editLoading from "@/components/message/editLoading.vue";
+import editWarn from "@/components/message/editWarn.vue";
+import editSuccess from "@/components/message/editSuccess.vue";
 
 export default {
   components: { editLoading, editWarn, editSuccess },
   setup() {
+    const store = useSourceStore();
+
     const showLoading = ref(false); // loading
     const warnShow = ref(false); // warn
     const successText = ref(""); // successText
@@ -73,8 +75,8 @@ export default {
         .then((res) => {
           showLoading.value = false;
           if (res.isSuccess) {
-            store.commit("changeTabName", "editList");
-            store.commit("saveSources", res.data);
+            store.changeTabName("editList");
+            store.saveSources(res.data);
             successText.value = `成功拉取${res.data.length}条源`;
             successShow.value = true;
           } else {
@@ -91,7 +93,7 @@ export default {
       successText.value = "正在推送中";
       successShow.value = true;
       showLoading.value = true;
-      let sources = store.getters.sources;
+      let sources = store.sources;
       api
         .pushSources(sources)
         .then((json) => {
@@ -125,33 +127,33 @@ export default {
     };
 
     const conver2Tab = () => {
-      store.commit("changeEditTabSource", store.state.currentSource);
-      store.commit("changeTabName", "editTab");
+      store.changeEditTabSource(store.currentSource);
+      store.changeTabName("editTab");
     };
     const conver2Source = () => {
-      store.commit("changeCurrentSource", store.state.editTabSource);
+      store.changeCurrentSource(store.editTabSource);
     };
 
     const undo = () => {
-      store.commit("editHistoryUndo");
+      store.editHistoryUndo();
     };
 
     const clearEdit = () => {
-      store.commit("clearEdit");
+      store.clearEdit();
       successText.value = "已清除";
       successShow.value = true;
     };
 
     const redo = () => {
-      store.commit("clearEdit");
-      store.commit("clearAllHistory");
+      store.clearEdit();
+      store.clearAllHistory();
       successText.value = "已清除所有历史记录";
       successShow.value = true;
     };
 
     const saveSource = () => {
       let isBookSource = /bookSource/.test(location.href),
-        source = store.state.currentSource;
+        source = store.currentSource;
       if (
         (isBookSource &&
           source.bookSourceUrl !== "" &&
@@ -167,8 +169,8 @@ export default {
                 isBookSource ? source.bookSourceName : source.sourceName
               }》已成功保存到「阅读3.0APP」`;
               successShow.value = true;
-              //save to store.state
-              store.commit("saveCurrentSource");
+              //save to store
+              store.saveCurrentSource();
             } else {
               warnText.value = `源《${
                 isBookSource ? source.bookSourceName : source.sourceName
@@ -187,10 +189,10 @@ export default {
 
     const debug = () => {
       showLoading.value = true;
-      store.commit("clearDeBugMsg");
-      store.commit("changeTabName", "editDebug");
+      store.clearDeBugMsg();
+      store.changeTabName("editDebug");
       let isBookSource = /bookSource/.test(location.href),
-        source = store.state.currentSource;
+        source = store.currentSource;
       api
         .pushSource(source)
         .then((res) => {
@@ -209,8 +211,8 @@ export default {
           if (isBookSource) {
             if (source.ruleSearch.checkKeyWord) {
               key = source.ruleSearch.checkKeyWord;
-            } else if (store.state.searchKey) {
-              key = store.state.searchKey;
+            } else if (store.searchKey) {
+              key = store.searchKey;
             } else {
               key = "我的";
             }
@@ -220,13 +222,13 @@ export default {
             socket.send(`{"tag":"${tag}", "key":"${key}"}`);
           };
           socket.onmessage = (msg) => {
-            store.commit("appendDeBugMsg", msg.data);
+            store.appendDeBugMsg(msg.data);
           };
           socket.onclose = () => {
             showLoading.value = false;
             successText.value = "调试已关闭！";
             successShow.value = true;
-            store.commit("appendDeBugMsg", "调试已关闭！");
+            store.appendDeBugMsg("调试已关闭！");
           };
         })
         .catch((err) => {

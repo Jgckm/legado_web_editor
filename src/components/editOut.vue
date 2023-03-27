@@ -49,13 +49,13 @@
 </template>
 
 <script>
-import editTab from "@/components/editTab";
-import editDebug from "@/components/editDebug";
-import editList from "@/components/editList";
-import editHelp from "@/components/editHelp";
+import editTab from "@/components/editTab.vue";
+import editDebug from "@/components/editDebug.vue";
+import editList from "@/components/editList.vue";
+import editHelp from "@/components/editHelp.vue";
 
 import { reactive, toRefs, watchEffect } from "vue";
-import store from "@/store";
+import { useSourceStore } from "@/store";
 
 export default {
   name: "editOut",
@@ -66,21 +66,18 @@ export default {
     editHelp,
   },
   setup() {
+    const store = useSourceStore();
     const data = reactive({
       url: localStorage.getItem("url") || "",
-      current_tab: store.state.currentTab || "editTab",
+      current_tab: store.currentTab || "editTab",
     });
 
     const handleSetActive = (tabName) => {
-      store.commit("changeTabName", tabName);
-    };
-
-    const changInput = (url) => {
-      store.commit("changeUrl", url);
+      store.changeTabName(tabName);
     };
 
     watchEffect(() => {
-      data.current_tab = store.state.currentTab;
+      data.current_tab = store.currentTab;
     });
     const pullSource = () => {
       document.querySelectorAll(".menu>button")[1].click();
@@ -88,7 +85,6 @@ export default {
     return {
       ...toRefs(data),
       handleSetActive,
-      changInput,
       pullSource,
     };
   },

@@ -31,7 +31,7 @@ jobs:
       - name: Format code
         if: ${{ github.repository == env.UPSTREAM_REPOSITORY }}
         run: |
-          npm run-script lint
+          npm run-script lint:fix
 
       - name: push changes
         if: ${{ github.repository == env.UPSTREAM_REPOSITORY }}

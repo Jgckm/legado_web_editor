@@ -1,30 +1,30 @@
 {
-  "name": "legado_web_source_editor",
+  "name": "legado_web_vue",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix --ext .js,.vue"
   },
   "dependencies": {
-    "core-js": "^3.8.3",
-    "vue": "^3.2.13",
+    "vue": "^3.2.47",
     "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "pinia": "^2.0.33",
+    "element-plus": "^2.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "eslint-config-prettier": "^8.5.0",
+    "@vitejs/plugin-vue": "^4.1.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-vue": "^9.4.0",
-    "sass": "^1.32.7",
-    "sass-loader": "^13.1.0"
+    "eslint-plugin-vue": "^8.7.1",
+    "prettier": "^2.8.4",
+    "vite": "^4.2.1",
+    "sass": "^1.60.0",
+    "vite-plugin-html": "^3.2.0",
+    "unplugin-vue-components": "^0.19.9"
   }
 }

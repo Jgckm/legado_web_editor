@@ -1,56 +1,53 @@
-import { createStore } from "vuex";
+import { createPinia, defineStore } from "pinia";
 
-export default createStore({
-  state: {
-    url: localStorage.getItem("url") || "",
-    bookSources: [], // 临时存放所有书源,
-    rssSources: [], // 临时存放所有订阅源
-    currentSource: {}, // 当前编辑的源
-    currentTab: localStorage.getItem("tabName") || "editTab",
-    editTabSource: {}, // 生成序列化的json数据
-    deBugMsg: "",
-    searchKey: "",
+export default createPinia();
+
+export const useSourceStore = defineStore("source", {
+  state: () => {
+    return {
+      url: localStorage.getItem("url") || "",
+      bookSources: [], // 临时存放所有书源,
+      rssSources: [], // 临时存放所有订阅源
+      currentSource: {}, // 当前编辑的源
+      currentTab: localStorage.getItem("tabName") || "editTab",
+      editTabSource: {}, // 生成序列化的json数据
+      deBugMsg: "",
+      searchKey: "",
+    };
   },
   getters: {
-    sources(state) {
-      return /bookSource/.test(location.href)
-        ? state.bookSources
-        : state.rssSources;
-    },
+    sources: (state) =>
+      /bookSource/.test(location.href) ? state.bookSources : state.rssSources,
   },
-  mutations: {
-    changeSearchKey(state, key) {
-      state.searchKey = key;
-    },
-
+  actions: {
     //拉取源后保存
-    saveSources(state, data) {
+    saveSources(data) {
       if (/bookSource/.test(location.href)) {
-        state.bookSources = data;
+        this.bookSources = data;
       } else {
-        state.rssSources = data;
+        this.rssSources = data;
       }
     },
     //删除源
-    deleteSources(state, data) {
+    deleteSources(data) {
       let sources = /bookSource/.test(location.href)
-        ? state.bookSources
-        : state.rssSources;
+        ? this.bookSources
+        : this.rssSources;
       data.forEach((source) => {
         let index = sources.indexOf(source);
         if (index > -1) sources.splice(index, 1);
       });
     },
     //保存当前编辑源
-    saveCurrentSource(state) {
-      let source = state.currentSource,
+    saveCurrentSource() {
+      let source = this.currentSource,
         sources,
         searchKey;
       if (/bookSource/.test(location.href)) {
-        sources = state.bookSources;
+        sources = this.bookSources;
         searchKey = "bookSourceUrl";
       } else {
-        sources = state.rssSources;
+        sources = this.rssSources;
         searchKey = "sourceUrl";
       }
       let index = sources.findIndex(
@@ -65,12 +62,12 @@ export default createStore({
       }
     },
     // 更改当前编辑的源
-    changeCurrentSource(state, source) {
+    changeCurrentSource(source) {
       const newContent = JSON.stringify(source);
-      state.currentSource = JSON.parse(newContent);
+      this.currentSource = JSON.parse(newContent);
     },
     // 修改当前源的某一个值
-    changeCurrentSourceValue(state, data) {
+    changeCurrentSourceValue(data) {
       let value = data.value;
       let convertor = {
         true: true,
@@ -84,30 +81,30 @@ export default createStore({
           rule2 = data.key.split("_")[1],
           obj = {};
         obj[rule2] = value;
-        //state.currentSource[rule1] is Object, use `Object.assign` to override value
-        state.currentSource[rule1] = Object.assign(
-          state.currentSource[rule1] || {},
+        //this.currentSource[rule1] is Object, use `Object.assign` to override value
+        this.currentSource[rule1] = Object.assign(
+          this.currentSource[rule1] || {},
           obj
         );
       } else {
-        state.currentSource[data.key] = value;
+        this.currentSource[data.key] = value;
       }
       // edit last time
-      state.currentSource.lastUpdateTime = new Date().getTime();
+      this.currentSource.lastUpdateTime = new Date().getTime();
       //阅读app通过是否存在ruleToc键值判断3.0书源和2.0书源
       if (/bookSource/.test(location.href))
-        state.currentSource["ruleToc"] = state.currentSource["ruleToc"] || {};
+        this.currentSource["ruleToc"] = this.currentSource["ruleToc"] || {};
     },
     // update editTab tabName and editTab info
-    changeTabName(state, tabName) {
-      state.currentTab = tabName;
+    changeTabName(tabName) {
+      this.currentTab = tabName;
       localStorage.setItem("tabName", tabName);
     },
-    changeEditTabSource(state, source) {
+    changeEditTabSource(source) {
       const newContent = JSON.stringify(source);
-      state.editTabSource = JSON.parse(newContent);
+      this.editTabSource = JSON.parse(newContent);
     },
-    editHistory(state, history) {
+    editHistory(history) {
       let historyObj;
       if (localStorage.getItem("history")) {
         historyObj = JSON.parse(localStorage.getItem("history"));
@@ -124,12 +121,12 @@ export default createStore({
         localStorage.setItem("history", JSON.stringify(arr));
       }
     },
-    editHistoryUndo(state) {
+    editHistoryUndo() {
       if (localStorage.getItem("history")) {
         let historyObj = JSON.parse(localStorage.getItem("history"));
-        historyObj.old.push(state.currentSource);
+        historyObj.old.push(this.currentSource);
         if (historyObj.new.length) {
-          state.currentSource = historyObj.new.pop();
+          this.currentSource = historyObj.new.pop();
         }
         localStorage.setItem("history", JSON.stringify(historyObj));
       }
@@ -137,25 +134,23 @@ export default createStore({
     clearAllHistory() {
       localStorage.setItem("history", JSON.stringify({ new: [], old: [] }));
     },
-    clearEdit(state) {
-      state.editTabSource = {};
-      state.currentSource = {};
+    clearEdit() {
+      this.editTabSource = {};
+      this.currentSource = {};
     },
-    appendDeBugMsg(state, msg) {
+    appendDeBugMsg(msg) {
       let el = document.querySelector("#debug_text");
       el.scrollTop = el.scrollHeight;
-      state.deBugMsg += msg + "\n";
+      this.deBugMsg += msg + "\n";
     },
-    clearDeBugMsg(state) {
-      state.deBugMsg = "";
+    clearDeBugMsg() {
+      this.deBugMsg = "";
     },
 
     // clear all source
-    clearAllSource(state) {
-      state.bookSources = [];
-      state.rssSources = [];
+    clearAllSource() {
+      this.bookSources = [];
+      this.rssSources = [];
     },
   },
-  actions: {},
-  modules: {},
 });

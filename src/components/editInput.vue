@@ -20,8 +20,8 @@
 
 <script>
 import { ref } from "vue";
-import store from "@/store";
-import calcTextareaHeight from "@/utils/calcTextareaHeight";
+import { useSourceStore } from "@/store";
+import calcTextareaHeight from "@/utils/calcTextareaHeight.js";
 
 export default {
   props: {
@@ -52,6 +52,7 @@ export default {
   },
   emits: ["changeContent"],
   setup(props, { emit }) {
+    const store = useSourceStore();
     const attr = ref("");
     const change = () => {
       emit("changeContent", {
@@ -73,21 +74,21 @@ export default {
         if (
           !idName.includes("_") &&
           newHistory[newHistory.length - 1][idName] !==
-            store.state.currentSource[idName]
+            store.currentSource[idName]
         ) {
-          store.commit("editHistory", store.state.currentSource);
+          store.editHistory(store.currentSource);
         } else if (idName.includes("_")) {
           let rule1 = idName.split("_")[0];
           let rule2 = idName.split("_")[1];
           if (
             newHistory[newHistory.length - 1][rule1][rule2] !==
-            store.state.currentSource[rule1][rule2]
+            store.currentSource[rule1][rule2]
           ) {
-            store.commit("editHistory", store.state.currentSource);
+            store.editHistory(store.currentSource);
           }
         }
       } else {
-        store.commit("editHistory", store.state.currentSource);
+        store.editHistory(store.currentSource);
       }
     };
 

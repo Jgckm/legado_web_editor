@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import sourceEditor from "@/views/sourceEditor";
+import sourceEditor from "@/views/sourceEditor.vue";
 
 const routes = [
   {

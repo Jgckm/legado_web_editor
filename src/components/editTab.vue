@@ -7,19 +7,20 @@
 </template>
 <script>
 import { reactive, toRefs, watchEffect } from "vue";
-import store from "@/store";
+import { useSourceStore } from "@/store";
 
 export default {
   name: "editTab",
   setup() {
+    const store = useSourceStore();
     const data = reactive({
       source: "",
     });
     const updateEditSource = () => {
-      store.commit("changeEditTabSource", JSON.parse(data.source));
+      store.changeEditTabSource(JSON.parse(data.source));
     };
     watchEffect(() => {
-      let source = store.state.editTabSource;
+      let source = store.editTabSource;
       if (Object.keys(source).length > 0) {
         source.lastUpdateTime = new Date().getTime();
         data.source = JSON.stringify(source, null, 4);

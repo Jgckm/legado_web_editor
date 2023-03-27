@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import editInput from "@/components/editInput";
+import editInput from "@/components/editInput.vue";
 import { reactive, toRefs } from "vue";
-import useCounter from "@/utils/useCounter";
+import useCounter from "@/utils/useCounter.js";
 
 export default {
   name: "editInputList",
