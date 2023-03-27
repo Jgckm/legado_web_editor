@@ -17,7 +17,7 @@
 <script>
 import editInput from "@/components/editInput.vue";
 import { reactive, toRefs } from "vue";
-import useCounter from "@/utils/useCounter.js";
+import utils from "@/utils/sourceUtils.js";
 
 export default {
   name: "editInputList",
@@ -31,7 +31,7 @@ export default {
     editInput,
   },
   setup(props) {
-    const { upData, getContent } = useCounter();
+    const { upData, getContent } = utils();
     const data = reactive({
       data: props.data,
     });
