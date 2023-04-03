@@ -28,8 +28,7 @@
       >清空</el-button
     >
   </div>
-  <el-checkbox-group
-  id="source-list" v-model="sourceSelect">
+  <el-checkbox-group id="source-list" v-model="sourceSelect">
     <el-checkbox
       v-for="source in sourcesFiltered"
       size="large"
