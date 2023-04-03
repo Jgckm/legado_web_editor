@@ -12,7 +12,7 @@ const APIExceptionHandler = (error) => {
 };
 
 const ajax = axios.create({
-  baseURL: import.meta.env.VITE_API,
+  baseURL: import.meta.env.VITE_API ?? location.origin,
   timeout: 5 * SECOND,
 });
 ajax.interceptors.response.use((response) => response, APIExceptionHandler);

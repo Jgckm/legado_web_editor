@@ -1,6 +1,7 @@
 import ajax from "./axios.js";
 
 const isBookSource = /bookSource/i.test(location.href);
+const { hostname, port } = new URL(import.meta.env.VITE_API ?? location.href);
 
 // Http
 const getSources = () =>
@@ -23,7 +24,6 @@ const deleteSource = (data) =>
 
 const debug = (sourceUrl, searchKey, onReceive, onFinish) => {
   // webSocket
-  const { hostname, port } = new URL(import.meta.env.VITE_API ?? location.href);
   const url = `ws://${hostname}:${Number(port) + 1}/${
     isBookSource ? "bookSource" : "rssSource"
   }Debug`;
