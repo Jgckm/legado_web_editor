@@ -1,7 +1,7 @@
 import ajax from "./axios.js";
 
 const isBookSource = /bookSource/i.test(location.href);
-const { hostname, port } = new URL(import.meta.env.VITE_API ?? location.href);
+const { hostname, port } = new URL(import.meta.env.VITE_API || location.href);
 
 // Http
 const getSources = () =>
