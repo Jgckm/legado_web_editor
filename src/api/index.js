@@ -6,7 +6,10 @@ const isBookSource = /bookSource/i.test(location.href);
 const getSources = () =>
   isBookSource ? ajax.get("getBookSources") : ajax.get("getRssSources");
 
-const saveSource = (data) => saveSources(Array.of(data));
+const saveSource = (data) =>
+  isBookSource
+    ? ajax.post("saveBookSource", data)
+    : ajax.post("saveRssSource", data);
 
 const saveSources = (data) =>
   isBookSource
