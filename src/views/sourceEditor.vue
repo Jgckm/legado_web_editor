@@ -33,9 +33,9 @@ if (/bookSource/i.test(location.href)) {
     margin-right: 20px;
   }
   #loading {
-  position: fixed;
-  top: 100px;
-  left: 90vw
+    position: fixed;
+    top: 100px;
+    left: 90vw;
   }
 }
 </style>
