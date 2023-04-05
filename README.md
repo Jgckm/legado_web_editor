@@ -6,10 +6,15 @@
 
 如果你想要调试项目 请修改文件`.env.development`里`VITE_API`为阅读web服务ip
 
+This project is web front of [legado](https://github.con/gedoor/legado/) web service.
+ 
+Before you running project, please change environment variable `VITE_API` to legado web service origin
+
 ## 路由
 
-/rssSource 订阅源编辑
-/rssSource 书源编辑
+https://localhost:8080/rssSource 订阅源编辑  rss editor
+
+https://localhost:8080/bookSource 书源编辑 bookSource editor
 
 ## 🎨Project setup
 
@@ -19,6 +24,9 @@ pnpm i
 
 ### Compiles and hot-reloads for development
 ```
+# change `VITE_API` to legado web service origin
+echo "VITE_API=https://192.168.1.3:1122" > .env.development
+
 pnpm run dev
 ```
 
