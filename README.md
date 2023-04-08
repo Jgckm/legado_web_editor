@@ -1,3 +1,7 @@
+
+移动到 https://github.com/gedoor/legado/tree/master/modules/web
+
+***
 # legado_web_editor
 
 ![image-20220901202413040](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031638325.png)
