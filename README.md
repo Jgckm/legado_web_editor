@@ -1,70 +1,47 @@
+
+移动到 https://github.com/gedoor/legado/tree/master/modules/web
+
+***
 # legado_web_editor
 
 ![image-20220901202413040](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031638325.png)
 
 ## 🚧开发注意
 
-如果你想要调试项目 请在开发者模式里手动设置`localStorage` 如：`url : 192.168.0.101:1122`设置完毕刷新即可
+如果你想要调试项目 请修改文件`.env.development`里`VITE_API`为阅读web服务ip
 
-![image-20220903163437674](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031634758.png)
+This project is web front of [legado](https://github.con/gedoor/legado/) web service.
 
-- 完美的支持原来的 web 编辑功能
-- 调整页面布局
-- 支持点击文本域自适应高度
-- 加入快捷键
-- 删除多个书源
+if you want to  **Edit Source**, check https://github.com/gedoor/legado_web_source_editor/issues/40#issuecomment-1497059032
 
-# 🚀快捷键说明
-| 操作               | 说明     |
-| :-------- | :-: |
-| `Ctrl`+`S`         | 保存书源 |
-| `Ctrl`+`Z`         | 撤销操作 |
-| `Ctrl`+`Shift`+`Z` | 返回撤销 |
-| `Ctrl`+`P` | 推送源 |
-| `Shift`+`P` | 拉取源 |
-| `Ctrl`+`E` | 生成源 |
-| `Shift`+`C` | 清空表单 |
-| `Shift`+`R`        | 重做操作 |
-| `Ctrl`+`Enter`     | 调试源   |
+Before you running project, please change environment variable `VITE_API` to legado web service origin
 
-每菜单个操作都有`快捷键`提示
+## 路由
 
-![快捷键提示](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031224684.gif)
+https://localhost:8080/rssSource 订阅源编辑  rss editor
 
-# 🎈高度自适应
-
-点击后文本框`高度自动适应`
-
-![高度自适应](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031628041.gif)
-
-# 🎇删除书源
-
-使用快捷键快速拉取源 
-
-`多选删除`
-
-![删除书源](https://cdn.jsdelivr.net/gh/jgckM/image@main/image/202209031249415.gif)
+https://localhost:8080/bookSource 书源编辑 bookSource editor
 
 ## 🎨Project setup
 
 ```
-npm install
+pnpm i
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+# change `VITE_API` to legado web service origin
+echo "VITE_API=https://192.168.1.3:1122" > .env.development
+pnpm run dev
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+pnpm run build
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+pnpm run lint:fix
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

@@ -1,37 +1,40 @@
 <template>
-  <textarea
+  <el-input
+    v-model="sourceString"
+    type="textarea"
     placeholder="这里输出序列化的JSON数据,可直接导入'阅读'APP"
-    v-model="sourceInfo"
-  ></textarea>
+    rows="30"
+    @change="update"
+    style="margin-bottom: 4px"
+  ></el-input>
 </template>
-<script>
-import { reactive, toRefs, watchEffect } from "vue";
-import store from "@/store";
+<script setup>
+import { useSourceStore } from "@/store";
 
-export default {
-  name: "editTab",
-  setup() {
-    const data = reactive({
-      sourceInfo: "",
+const store = useSourceStore();
+const sourceString = ref("");
+const update = async (string) => {
+  try {
+    store.changeEditTabSource(JSON.parse(string));
+  } catch {
+    ElMessage({
+      message: "粘贴的源格式错误",
+      type: "error",
     });
-    watchEffect(() => {
-      let sourceInfo = store.state.editTabSourceInfo;
-      if (Object.keys(sourceInfo).length > 0) {
-        sourceInfo.lastUpdateTime = new Date().getTime();
-        data.sourceInfo = JSON.stringify(sourceInfo, null, 4);
-      } else {
-        data.sourceInfo = "";
-      }
-    });
-    return {
-      ...toRefs(data),
-    };
-  },
+  }
 };
-</script>
 
-<style scoped>
-textarea {
-  font-size: 14px;
+watchEffect(async () => {
+  let source = store.editTabSource;
+  if (Object.keys(source).length > 0) {
+    sourceString.value = JSON.stringify(source, null, 4);
+  } else {
+    sourceString.value = "";
+  }
+});
+</script>
+<style>
+.el-input {
+  width: 100%;
 }
 </style>
